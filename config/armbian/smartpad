@@ -9,7 +9,7 @@
 DOWNLOAD_URL_CHECKSUM="https://github.com/KwadFan/SmartPi-armbian/releases/download/20240215-1515/Yumi-smartpad-bookworm-server.img.xz.sha256"
 DOWNLOAD_URL_IMAGE="https://github.com/KwadFan/SmartPi-armbian/releases/download/20240215-1515/Yumi-smartpad-bookworm-server.img.xz"
 
-
+BASE_IMAGE_ENLARGEROOT=3500
 MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,mainsailos,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar))"
 
 # export Variables
