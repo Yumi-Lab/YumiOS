@@ -10,7 +10,7 @@ DOWNLOAD_BASE_URL="https://github.com/Yumi-Lab/SmartPi-armbian/releases/latest/d
 # Base User
 BASE_ADD_USER="yes"
 BASE_USER="pi"
-BASE_USER_PASSWORD="armbian"
+BASE_USER_PASSWORD="yumi"
 
 # Needed while building for non rpi sbc
 BASE_DISTRO="armbian"
