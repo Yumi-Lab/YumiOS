@@ -16,10 +16,3 @@ MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,mainsailos,klipper,is_req_
 export BASE_ARCH
 export DOWNLOAD_URL_CHECKSUM
 export DOWNLOAD_URL_IMAGE
-
-### JSON sniplet Setup
-### NOTE: Please see all config files for setup variables!!!
-# shellcheck disable=SC2034
-JSON_PRETTY_SBC_NAME="Yumi SmartPad"
-# shellcheck disable=SC2034
-JSON_SUPPORTED_SBC="smartpad-64bit"
