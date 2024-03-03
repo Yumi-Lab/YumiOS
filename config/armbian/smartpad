@@ -10,7 +10,7 @@ DOWNLOAD_URL_CHECKSUM="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz
 DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz"
 
 BASE_IMAGE_ENLARGEROOT=6000
-MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar))"
+MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad))"
 
 # export Variables
 export BASE_ARCH
