@@ -9,9 +9,6 @@
 DOWNLOAD_URL_CHECKSUM="${DOWNLOAD_BASE_URL}/Yumi-smartpi1-bookworm-server.img.xz"
 DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpi1-bookworm-server.img.xz.sha256"
 
-
-MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,mainsailos,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar))"
-
 # export Variables
 export BASE_ARCH
 export DOWNLOAD_URL_CHECKSUM
