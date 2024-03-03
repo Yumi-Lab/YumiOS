@@ -20,7 +20,7 @@ install_cleanup_trap
 echo_green "Apply SmartPad specific patches..."
 unpack /filesystem/root /
 if [[ -f /etc/X11/xorg.conf.d/03-smartpad-rotate-touch.conf ]]; then
-    rm -fv -f /etc/X11/xorg.conf.d/03-smartpad-rotate-touch.conf
+    rm -fv /etc/X11/xorg.conf.d/03-smartpad-rotate-touch.conf
 fi
 
 echo_green "Apply SmartPad specific patches... [DONE]"
