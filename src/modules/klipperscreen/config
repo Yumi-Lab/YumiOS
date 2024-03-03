@@ -16,5 +16,5 @@
 
 
 # For testing bugfix branch, will be removed
-[ -n "$KLIPPERSCREEN_REPO_SHIP" ] || KLIPPERSCREEN_REPO_SHIP="https://github.com/KwadFan/KlipperScreen"
+[ -n "$KLIPPERSCREEN_REPO_SHIP" ] || KLIPPERSCREEN_REPO_SHIP="https://github.com/KwadFan/KlipperScreen.git"
 [ -n "$KLIPPERSCREEN_REPO_BRANCH" ] || KLIPPERSCREEN_REPO_BRANCH="fix/chrootinstall"
