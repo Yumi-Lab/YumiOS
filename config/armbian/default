@@ -20,6 +20,8 @@ BASE_IMAGE_RASPBIAN="no"
 BASE_ROOT_PARTITION="2"
 BASE_IMAGE_ENLARGEROOT=2500
 BASE_IMAGE_RESIZEROOT=600
+# Set boot partition mountpoint
+BASE_BOOT_MOUNT_PATH="/boot/"
 # Compress not needed due compression done in workflow
 BASE_RELEASE_COMPRESS=no
 # Modules are valid for 32bit and 64bit images
@@ -35,5 +37,6 @@ export BASE_IMAGE_RASPBIAN
 export BASE_ROOT_PARTITION
 export BASE_IMAGE_ENLARGEROOT
 export BASE_IMAGE_RESIZEROOT
+export BASE_BOOT_MOUNT_PATH
 export BASE_RELEASE_COMPRESS
 export MODULES
