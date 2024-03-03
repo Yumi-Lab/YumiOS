@@ -2,6 +2,6 @@
 # shellcheck disable=all
 [ -n "$IS_REQ_PREINSTALL_VENV_DIR" ] || IS_REQ_PREINSTALL_VENV_DIR=/home/${BASE_USER}/klippy-env
 [ -n "$IS_REQ_PREINSTALL_DEPS" ] || IS_REQ_PREINSTALL_DEPS="python3-numpy python3-matplotlib \
-libopenblas0-pthread libatlas-base-dev libopenblas-base libgfortran5"
-[ -n "$IS_REQ_PREINSTALL_PIP" ] || IS_REQ_PREINSTALL_PIP="numpy<=1.24.2"
+libopenblas0-pthread libatlas-base-dev libopenblas libgfortran5"
+[ -n "$IS_REQ_PREINSTALL_PIP" ] || IS_REQ_PREINSTALL_PIP="numpy==1.26.4"
 
