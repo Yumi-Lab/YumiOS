@@ -138,7 +138,7 @@ pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_PLR.git
 cd YUMI_PLR
 chmod +x ./install.sh
-sudo -u "${BASE_USER}" ./install.sh
+./install.sh
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
