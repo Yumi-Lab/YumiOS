@@ -81,7 +81,7 @@ echo_green "Install yumi-config smartpad_generic ... [DONE]"
 
 echo_green "Install YUMI_SYNC ..."
 pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_SYNC.git
+sudo -u "${BASE_USER}" git clone -b debug https://github.com/Yumi-Lab/YUMI_SYNC.git
 cd YUMI_SYNC
 make install
 cd ..
