@@ -140,3 +140,49 @@ chmod +x ./install.sh
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
+
+#Install USB tool for GCODES
+echo_green "Install USB_CONNECT ..."
+pushd "/home/${BASE_USER}" &>/dev/null
+
+echo_green "Create script USB_CONNECT ..."
+sudo touch /usr/local/bin/usb-mount.sh
+#Script mount
+CONTENTMOUNT="#!/bin/bash
+MOUNT_POINT="/home/pi/printer_data/gcodes/USB"
+DEVICE=$1
+# Log
+echo "Mounting $DEVICE at $MOUNT_POINT" >> /tmp/usb-mount.log
+# Crée le point de montage s'il n'existe pas
+mkdir -p $MOUNT_POINT
+# Monte le périphérique
+mount $DEVICE $MOUNT_POINT 2>> /tmp/usb-mount.log
+# Applique les permissions uniquement au point de montage principal
+chown pi:pi $MOUNT_POINT 2>> /tmp/usb-mount.log
+# Log success
+echo "Mounted $DEVICE at $MOUNT_POINT" >> /tmp/usb-mount.log
+"
+#script +x
+echo "$CONTENTMOUNT" > /usr/local/bin/usb-mount.sh
+sudo chmod +x /usr/local/bin/usb-mount.sh
+
+echo_green "Create rule USB_CONNECT ..."
+#rule cmount
+echo 'ACTION=="add", SUBSYSTEM=="block", KERNEL=="sd[a-z][0-9]", RUN+="/usr/local/bin/usb-mount.sh /dev/%k"' > /etc/udev/rules.d/99-usb-automount.rules
+
+echo_green "Create rule USB_DISCONNECT ..."
+sudo touch /usr/local/bin/usb-umount.sh
+#script umount
+CONTENTUMOUNT="##!/bin/bash
+MOUNT_POINT="/home/pi/printer_data/gcodes/USB"
+# Démontage du périphérique
+umount $MOUNT_POINT
+"
+#script +x
+echo "$CONTENTUMOUNT" > /usr/local/bin/usb-umount.sh
+sudo chmod +x /usr/local/bin/usb-umount.sh
+
+echo_green "Create rule USB_CONNECT ..."
+#rule umount
+echo 'ACTION=="remove", SUBSYSTEM=="block", KERNEL=="sd[a-z][0-9]", RUN+="/usr/local/bin/usb-umount.sh"' > /etc/udev/rules.d/99-usb-autoumount.rules
+
