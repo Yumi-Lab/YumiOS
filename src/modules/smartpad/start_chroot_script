@@ -155,7 +155,8 @@ echo_green "Install USB Mount Scripts... [DONE]"
 #Install USB tool for GCODES
 echo_green "Install TMC Autotune..."
 pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" wget -O - https://raw.githubusercontent.com/andrewmcgr/klipper_tmc_autotune/main/install.sh | bash
+sudo -u "${BASE_USER}" wget -O - https://raw.githubusercontent.com/andrewmcgr/klipper_tmc_autotune/main/install.sh
+sudo -u "${BASE_USER}" ./install.sh
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
 
 [update_manager klipper_tmc_autotune]
