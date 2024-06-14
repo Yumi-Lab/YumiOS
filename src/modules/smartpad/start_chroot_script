@@ -140,37 +140,3 @@ chmod +x ./install.sh
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
-
-#Install USB tool for GCODES
-echo_green "Install USB Mount Scripts..."
-pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/automount-usb-klipper.git
-cd automount-usb-klipper/
-sudo ./CONFIGURE.sh
-cd ..
-popd &>/dev/null
-echo_green "Install USB Mount Scripts... [DONE]"
-
-
-#Install USB tool for GCODES
-echo_green "Install TMC Autotune..."
-pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/klipper_tmc_autotune.git
-pushd "/home/${BASE_USER}/klipper_tmc_autotune" &> /dev/null || exit 1
-KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/install.sh"
-sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
-echo_green "Update Moonraker TMC Autotune..."
-cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
-
-# TMC Autotune
-[update_manager klipper_tmc_autotune]
-type: git_repo
-channel: dev
-path: ~/klipper_tmc_autotune
-origin: https://github.com/andrewmcgr/klipper_tmc_autotune.git
-managed_services: klipper
-primary_branch: main
-install_script: install.sh
-
-EOF
-echo_green "Install TMC Autotune... [DONE]"
