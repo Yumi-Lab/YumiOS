@@ -157,7 +157,8 @@ echo_green "Install TMC Autotune..."
 pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/andrewmcgr/klipper_tmc_autotune.git
 cd klipper_tmc_autotune/
-sudo ./install.sh
+./install.sh
+echo_green "Update Moonraker TMC Autotune..."
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
 
 [update_manager klipper_tmc_autotune]
