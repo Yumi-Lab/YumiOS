@@ -12,4 +12,3 @@
 # shellcheck disable=all
 
 [[ -n "$SMARTPAD_GIT_TMC_AUTOTUNE" ]] || SMARTPAD_GIT_TMC_AUTOTUNE="https://github.com/Maxime3d77/klipper_tmc_autotune.git"
-[[ -n "$SMARTPAD_MOONRAKER_PATH" ]] || $SMARTPAD_MOONRAKER_PATH=/home/pi/printer_data/config/moonraker.conf
