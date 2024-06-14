@@ -156,11 +156,13 @@ echo_green "Install USB Mount Scripts... [DONE]"
 echo_green "Install TMC Autotune..."
 pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/andrewmcgr/klipper_tmc_autotune.git
-cd klipper_tmc_autotune/
-./install.sh
+pushd "/home/${BASE_USER}/klipper_tmc_autotune" &> /dev/null || exit 1
+KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/install.sh"
+sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
 echo_green "Update Moonraker TMC Autotune..."
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
 
+# TMC Autotune
 [update_manager klipper_tmc_autotune]
 type: git_repo
 channel: dev
