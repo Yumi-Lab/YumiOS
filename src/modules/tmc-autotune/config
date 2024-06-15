@@ -11,4 +11,3 @@
 
 # shellcheck disable=all
 
-[[ -n "$SMARTPAD_GIT_TMC_AUTOTUNE" ]] || SMARTPAD_GIT_TMC_AUTOTUNE="https://github.com/Maxime3d77/klipper_tmc_autotune.git"

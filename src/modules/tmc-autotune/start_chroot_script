@@ -20,7 +20,7 @@ install_cleanup_trap
 #Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
 pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone "${SMARTPAD_GIT_TMC_AUTOTUNE}"
+sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/klipper_tmc_autotune.git
 pushd "/home/${BASE_USER}/klipper_tmc_autotune" &> /dev/null || exit 1
 KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/install.sh"
 sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
