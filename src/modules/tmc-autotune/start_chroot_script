@@ -20,9 +20,9 @@ install_cleanup_trap
 #Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
 pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/klipper_tmc_autotune.git
+sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
 pushd "/home/${BASE_USER}/klipper_tmc_autotune" &> /dev/null || exit 1
-KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/install.sh"
+KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/Install_tmc_autotune.sh"
 sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
 echo_green "Update Moonraker TMC Autotune..."
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
@@ -32,7 +32,7 @@ cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
 type: git_repo
 channel: dev
 path: ~/klipper_tmc_autotune
-origin: https://github.com/Maxime3d77/klipper_tmc_autotune.git
+origin: https://github.com/andrewmcgr/klipper_tmc_autotune
 managed_services: klipper
 primary_branch: main
 install_script: install.sh
