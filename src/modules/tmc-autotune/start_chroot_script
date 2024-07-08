@@ -21,30 +21,10 @@ install_cleanup_trap
 echo_green "Install TMC Autotune..."
 pushd "/home/pi" &>/dev/null
 echo_green "Install TMC Autotune git clone..."
-sudo git clone https://github.com/andrewmcgr/klipper_tmc_autotune
+sudo git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
 pushd "/home/pi/klipper_tmc_autotune" &> /dev/null || exit 1
 echo_green "Install TMC Autotune launch script..."
-sudo chmod +x /home/pi/klipper_tmc_autotune/install.sh
-sudo ./home/pi/klipper_tmc_autotune/install.sh
-
-echo_green "Update Moonraker TMC Autotune..."
-cat << EOF | sudo tee -a /home/pi/printer_data/config/tmc_autotune.cfg > /dev/null
-
-# TMC Autotune
-[update_manager klipper_tmc_autotune]
-type: git_repo
-channel: dev
-path: ~/klipper_tmc_autotune
-origin: https://github.com/andrewmcgr/klipper_tmc_autotune
-managed_services: klipper
-primary_branch: main
-install_script: install.sh
-
-EOF
-
-# Add the line [include tmc_autotune.cfg] to the beginning of moonraker.conf
-echo_green "Adding [include tmc_autotune.cfg] to /home/pi/printer_data/config/moonraker.conf..."
-sudo sed -i '1i [include tmc_autotune.cfg]' /home/pi/printer_data/config/moonraker.conf
-
+sudo chmod +x /home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
+sudo bash ./home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
 echo_green "Install TMC Autotune... [DONE]"
 
