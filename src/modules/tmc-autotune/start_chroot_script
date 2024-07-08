@@ -20,10 +20,10 @@ install_cleanup_trap
 # Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
 echo_green "Install TMC Autotune git clone..."
-wget -O - https://github.com/Yumi-Lab/klipper_tmc_autotune/raw/main/install_tmc_autotune.sh
+wget -O - https://github.com/Yumi-Lab/klipper_tmc_autotune/raw/main/install_tmc_autotune.sh | bash
 echo_green "Install TMC Autotune launch script..."
 
-sudo chmod +x install_tmc_autotune.sh
-sudo bash ./install_tmc_autotune.sh
+#sudo chmod +x install_tmc_autotune.sh
+#sudo bash ./install_tmc_autotune.sh
 echo_green "Install TMC Autotune... [DONE]"
 
