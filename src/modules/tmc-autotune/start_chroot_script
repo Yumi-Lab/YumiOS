@@ -19,13 +19,13 @@ install_cleanup_trap
 
 #Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
-pushd "/home/${BASE_USER}" &>/dev/null
+pushd "/home/pi" &>/dev/null
 echo_green "Install TMC Autotune git clone..."
-sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
-pushd "/home/${BASE_USER}/klipper_tmc_autotune" &> /dev/null || exit 1
+sudo git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
+pushd "/home/pi/klipper_tmc_autotune" &> /dev/null || exit 1
 echo_green "Install TMC Autotune launch script..."
-KS_BUILD_INSTALL_SH="/home/${BASE_USER}/klipper_tmc_autotune/Install_tmc_autotune.sh"
-sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
+sudo chmod +x /home/pi/klipper_tmc_autotune/Install_tmc_autotune.sh
+sudo  ./home/pi/klipper_tmc_autotune/Install_tmc_autotune.sh"
 
 echo_green "Update Moonraker TMC Autotune..."
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
