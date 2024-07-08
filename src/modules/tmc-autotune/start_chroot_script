@@ -25,7 +25,7 @@ sudo git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
 pushd "/home/pi/klipper_tmc_autotune" &> /dev/null || exit 1
 echo_green "Install TMC Autotune launch script..."
 sudo chmod +x /home/pi/klipper_tmc_autotune/Install_tmc_autotune.sh
-sudo  ./home/pi/klipper_tmc_autotune/Install_tmc_autotune.sh"
+sudo  ./home/pi/klipper_tmc_autotune/Install_tmc_autotune.sh
 
 echo_green "Update Moonraker TMC Autotune..."
 cat << EOF | sudo tee -a /home/pi/printer_data/config/moonraker.conf > /dev/null
