@@ -22,7 +22,8 @@ echo_green "Install TMC Autotune..."
 echo_green "Install TMC Autotune git clone..."
 sudo git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
 echo_green "Install TMC Autotune launch script..."
-sudo chmod +x /home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
-sudo bash ./home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
+cd klipper_tmc_autotune
+sudo chmod +x install_tmc_autotune.sh
+sudo bash ./install_tmc_autotune.sh
 echo_green "Install TMC Autotune... [DONE]"
 
