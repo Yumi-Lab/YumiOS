@@ -19,10 +19,8 @@ install_cleanup_trap
 
 # Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
-pushd "/home/pi" &>/dev/null
 echo_green "Install TMC Autotune git clone..."
 sudo git clone https://github.com/Yumi-Lab/klipper_tmc_autotune
-pushd "/home/pi/klipper_tmc_autotune" &> /dev/null || exit 1
 echo_green "Install TMC Autotune launch script..."
 sudo chmod +x /home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
 sudo bash ./home/pi/klipper_tmc_autotune/install_tmc_autotune.sh
