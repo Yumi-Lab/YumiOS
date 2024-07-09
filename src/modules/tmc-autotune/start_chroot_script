@@ -17,6 +17,8 @@ set -Ee
 source /common.sh
 install_cleanup_trap
 
+unpack /filesystem/home/pi /
+
 # Install TMC AUTOTUNE for GCODES
 echo_green "Install TMC Autotune..."
 echo_green "Install TMC Autotune git clone..."
