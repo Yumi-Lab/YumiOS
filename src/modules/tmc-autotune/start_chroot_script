@@ -28,4 +28,3 @@ echo_green "Install TMC Autotune launch script..."
 #sudo bash ./install_tmc_autotune.sh
 echo_green "Install TMC Autotune... [DONE]"
 
-
