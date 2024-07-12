@@ -20,7 +20,43 @@ install_cleanup_trap
 
 # Set CPU governor to powersave
 echo_green "Set CPU governor powersave..."
-  for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
- echo powersave | sudo tee "${CPU}";
- done
+# Script to set up CPU governor to powersave on first boot
+
+# Create the script that will be executed on first boot
+cat << 'EOF' > /usr/local/bin/set_cpu_governor.sh
+#!/bin/bash
+# Set CPU governor to powersave
+for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+  echo powersave | tee "${CPU}"
+done
+
+# Disable the service after first run
+systemctl disable set-cpu-governor.service
+EOF
+
+# Make the script executable
+chmod +x /usr/local/bin/set_cpu_governor.sh
+
+# Create a systemd service to run the script at startup
+cat << 'EOF' > /etc/systemd/system/set-cpu-governor.service
+[Unit]
+Description=Set CPU governor to powersave on first boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/set_cpu_governor.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd to recognize the new service
+systemctl daemon-reload
+
+# Enable the service to run at startup
+systemctl enable set-cpu-governor.service
+
+echo "Setup complete. The CPU governor will be set to powersave on the next boot."
 echo_green "Set CPU governor powersave...(DONE)"
