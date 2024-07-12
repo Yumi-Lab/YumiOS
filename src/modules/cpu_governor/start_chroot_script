@@ -20,8 +20,7 @@ install_cleanup_trap
 
 # Set CPU governor to powersave
 echo_green "Set CPU governor powersave..."
-#!/bin/bash
-# Script to set up CPU governor to powersave on first boot
+# Script to set up CPU governor to powersave on first boot with a delay
 
 # Create the script that will be executed on first boot
 cat << 'EOF' > /usr/local/bin/set_cpu_governor.sh
@@ -30,7 +29,6 @@ cat << 'EOF' > /usr/local/bin/set_cpu_governor.sh
 for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
     echo powersave | sudo tee $CPU;
 done
-
 
 # Disable the service after first run
 systemctl disable set-cpu-governor.service
@@ -43,10 +41,11 @@ chmod +x /usr/local/bin/set_cpu_governor.sh
 cat << 'EOF' > /etc/systemd/system/set-cpu-governor.service
 [Unit]
 Description=Set CPU governor to powersave on first boot
-After=network.target
+After=multi-user.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/bin/sleep 120
 ExecStart=/usr/local/bin/set_cpu_governor.sh
 RemainAfterExit=true
 
@@ -60,6 +59,18 @@ systemctl daemon-reload
 # Enable the service to run at startup
 systemctl enable set-cpu-governor.service
 
-echo "Setup complete. The CPU governor will be set to powersave on the next boot."
+# Start the service immediately for testing
+systemctl start set-cpu-governor.service
+
+# Check the status of the service
+systemctl status set-cpu-governor.service
+
+# Create a cron job to ensure CPU governor remains on powersave
+cat << 'EOF' > /etc/cron.d/cpu_governor
+*/5 * * * * root for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo powersave | sudo tee $CPU; done
+EOF
+
+echo "Setup complete. The CPU governor will be set to powersave on the next boot and maintained via cron."
+
 
 echo_green "Set CPU governor powersave...(DONE)"
