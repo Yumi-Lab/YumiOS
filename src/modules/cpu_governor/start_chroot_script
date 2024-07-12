@@ -10,7 +10,7 @@
 
 # shellcheck enable=require-variable-braces
 # Source error handling, leave this in place
-set -Ee
+#set -Ee
 
 # Source CustomPIOS common.sh
 # shellcheck disable=SC1091
@@ -28,7 +28,7 @@ cat << 'EOF' > /usr/local/bin/set_cpu_governor.sh
 #!/bin/bash
 # Set CPU governor to powersave
 for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
-  echo powersave | tee "${CPU}"
+  echo powersave | tee $CPU
 done
 
 # Disable the service after first run
