@@ -21,6 +21,6 @@ install_cleanup_trap
 # Set CPU governor to powersave
 echo_green "Set CPU governor powersave..."
   for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
- echo powersave | sudo tee $CPU;
+ echo powersave | sudo tee "${CPU}";
  done
 echo_green "Set CPU governor powersave...(DONE)"
