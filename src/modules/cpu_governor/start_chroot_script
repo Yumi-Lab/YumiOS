@@ -20,6 +20,7 @@ install_cleanup_trap
 
 # Set CPU governor to powersave
 echo_green "Set CPU governor powersave..."
+#!/bin/bash
 # Script to set up CPU governor to powersave on first boot
 
 # Create the script that will be executed on first boot
@@ -59,4 +60,5 @@ systemctl daemon-reload
 systemctl enable set-cpu-governor.service
 
 echo "Setup complete. The CPU governor will be set to powersave on the next boot."
+
 echo_green "Set CPU governor powersave...(DONE)"
