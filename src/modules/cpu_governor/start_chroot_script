@@ -1,4 +1,4 @@
- #!/usr/bin/env bash
+#!/usr/bin/env bash
 #### Smartpad Specific Tweaks for armbian images
 ####
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
