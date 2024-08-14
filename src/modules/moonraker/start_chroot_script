@@ -48,29 +48,29 @@ echo_green "Clone moonraker repo ..."
 ## Step 2: clone moonraker repo
 gitclone MOONRAKER_REPO moonraker
 
-echo_green "grep PKGLIST from install moonraker ..."
+#echo_green "grep PKGLIST from install moonraker ..."
 ## Step 3: grep PKGLIST from install-moonraker.sh for dependencies
-echo_green "Generating packages file ..."
-grep "PKGLIST=" "${MN_BUILD_INSTALL_SH}" >> "${MN_BUILD_PACKAGE_FILE}"
+#echo_green "Generating packages file ..."
+#grep "PKGLIST=" "${MN_BUILD_INSTALL_SH}" >> "${MN_BUILD_PACKAGE_FILE}"
 
-echo_green "Rename PKGLIST ..."
+e#cho_green "Rename PKGLIST ..."
 ## Step 4: Rename PKGLIST to Module usable Var
-echo_green "Rename variable PKGLIST to MOONRAKER_DEPS ..."
-sed -i 's/PKGLIST/MOONRAKER_DEPS/g' "${MN_BUILD_PACKAGE_FILE}"
+#echo_green "Rename variable PKGLIST to MOONRAKER_DEPS ..."
+#sed -i 's/PKGLIST/MOONRAKER_DEPS/g' "${MN_BUILD_PACKAGE_FILE}"
 
 echo_green "Source cn_package.lst..."
 ## Step 5: Source cn_package.lst file
 # shellcheck disable=SC1090
 # Shellcheck has to be disabled here,
 # because it is an dynamic generated file and not checkable
-. "${MN_BUILD_PACKAGE_FILE}"
+#. "${MN_BUILD_PACKAGE_FILE}"
 
-echo_green "Install package ..."
+#echo_green "Install package ..."
 ## Step 6: Install packages
-echo_green "Install moonraker dependencies ..."
+#echo_green "Install moonraker dependencies ..."
 # shellcheck disable=SC2086
 # disabled because we need 'wordsplitting'
-check_install_pkgs ${MOONRAKER_DEPS}
+#check_install_pkgs ${MOONRAKER_DEPS}
 
 echo_green "Move to moonraker as working directory ..."
 ## Step 7: Move to moonraker as working directory
