@@ -22,6 +22,10 @@ set -Ee
 source /common.sh
 install_cleanup_trap
 
+# pip install for Moonraker 
+sudo apt install -y python3-pip
+sudo apt install -y python3.11-venv
+
 # Module only Variables
 MN_BUILD_PACKAGE_FILE="/tmp/mn_packages.lst"
 MN_BUILD_INSTALL_SH="/home/${BASE_USER}/moonraker/scripts/install-moonraker.sh"
