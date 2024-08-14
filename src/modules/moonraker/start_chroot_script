@@ -30,7 +30,7 @@ sudo apt install -y python3-virtualenv python3-dev libopenjp2-7 python3-libgpiod
 
 # Module only Variables
 MN_BUILD_PACKAGE_FILE="/tmp/mn_packages.lst"
-MN_BUILD_INSTALL_SH="/home/${BASE_USER}/moonraker/scripts/install-moonraker.sh"
+#MN_BUILD_INSTALL_SH="/home/${BASE_USER}/moonraker/scripts/install-moonraker.sh"
 
 echo_green "Installing Moonraker and enable Moonraker Service ..."
 echo_green "apt update ..."
@@ -48,12 +48,12 @@ echo_green "Clone moonraker repo ..."
 ## Step 2: clone moonraker repo
 gitclone MOONRAKER_REPO moonraker
 
-#echo_green "grep PKGLIST from install moonraker ..."
+echo_green "grep PKGLIST from install moonraker ..."
 ## Step 3: grep PKGLIST from install-moonraker.sh for dependencies
-#echo_green "Generating packages file ..."
+echo_green "Generating packages file ..."
 #grep "PKGLIST=" "${MN_BUILD_INSTALL_SH}" >> "${MN_BUILD_PACKAGE_FILE}"
 
-e#cho_green "Rename PKGLIST ..."
+echo_green "Rename PKGLIST ..."
 ## Step 4: Rename PKGLIST to Module usable Var
 #echo_green "Rename variable PKGLIST to MOONRAKER_DEPS ..."
 #sed -i 's/PKGLIST/MOONRAKER_DEPS/g' "${MN_BUILD_PACKAGE_FILE}"
@@ -65,9 +65,9 @@ echo_green "Source cn_package.lst..."
 # because it is an dynamic generated file and not checkable
 #. "${MN_BUILD_PACKAGE_FILE}"
 
-#echo_green "Install package ..."
+echo_green "Install package ..."
 ## Step 6: Install packages
-#echo_green "Install moonraker dependencies ..."
+echo_green "Install moonraker dependencies ..."
 # shellcheck disable=SC2086
 # disabled because we need 'wordsplitting'
 #check_install_pkgs ${MOONRAKER_DEPS}
