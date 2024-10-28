@@ -26,8 +26,28 @@ runs:
   steps:
     - name: Install Dependencies
       shell: bash
-      run: sudo apt update; sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
+      run: |
+        echo "Installing dependencies..."
+        sudo apt update
+        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip python3-venv git
 
+    - name: Set up Python Virtual Environment
+      shell: bash
+      run: |
+        echo "Setting up Python virtual environment..."
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install gitpython
+        pip freeze | grep GitPython
+
+    - name: Test GitPython Import
+      shell: bash
+      run: |
+        echo "Testing GitPython import..."
+        source venv/bin/activate
+        python -c "import git; print('GitPython is installed and working')"
+        
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
       with:
