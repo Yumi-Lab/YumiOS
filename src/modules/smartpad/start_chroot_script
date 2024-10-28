@@ -140,13 +140,3 @@ chmod +x ./install.sh
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
-
-#Install USB tool for GCODES
-echo_green "Install USB Mount Scripts..."
-pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/automount-usb-klipper.git
-cd automount-usb-klipper/
-sudo ./CONFIGURE.sh
-cd ..
-popd &>/dev/null
-echo_green "Install USB Mount Scripts... [DONE]"
