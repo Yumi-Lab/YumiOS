@@ -47,7 +47,7 @@ runs:
         echo "Testing GitPython import..."
         source venv/bin/activate
         python -c "import git; print('GitPython is installed and working')"
-        
+
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
       with:
@@ -139,7 +139,10 @@ runs:
 
     - name: Update CustomPiOS Paths
       shell: bash
-      run: cd repository/src && ../../CustomPiOS/src/update-custompios-paths
+      run: |
+        source venv/bin/activate
+        cd repository/src && ../../CustomPiOS/src/update-custompios-paths
+
 
     - name: Build Image
       shell: bash
