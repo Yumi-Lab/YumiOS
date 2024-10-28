@@ -15,10 +15,10 @@ inputs:
     default: "devel"
 outputs:
   type:
-    description: SBC type (raspberry/armbian/...)
+    description: SBC type (raspberry/armbian...)
     value: ${{ steps.config.outputs.TYPE }}
   sbc:
-    description: SBC model (rpi32/orangepi4lts/...)
+    description: SBC model (rpi32/orangepi4lts...)
     value: ${{ steps.config.outputs.SBC }}
 
 runs:
@@ -151,7 +151,24 @@ runs:
 
     - name: Build Image
       shell: bash
-      run: sudo modprobe loop && cd repository/src && sudo bash -x ./build_dist
+      run: |
+        sudo modprobe loop
+        cd repository/src
+        echo "Running build_dist script..."
+        sudo bash -x ./build_dist
+        echo "Finished building image."
+        echo "Listing files in repository/src/workspace after build:"
+        ls -l repository/src/workspace
+
+    - name: Check for Image File
+      shell: bash
+      run: |
+        if compgen -G "repository/src/workspace/*.img" > /dev/null; then
+          echo "Image file found."
+        else
+          echo "No image file found in repository/src/workspace."
+          exit 1
+        fi
 
     - name: Cleanup workspace & fix permissions
       if: success()
