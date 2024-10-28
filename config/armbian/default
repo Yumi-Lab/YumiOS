@@ -1,34 +1,33 @@
 #!/usr/bin/env bash
-# Shebang pour une meilleure détection du fichier
-# Voir https://www.shellcheck.net/wiki/SC2155 pour les bonnes pratiques
+# Shebang for better file detection
 
-# URL de téléchargement de base
+# Declare Variables before exporting.
+# See https://www.shellcheck.net/wiki/SC2155
+
+# Download Base Url
 DOWNLOAD_BASE_URL="https://github.com/Yumi-Lab/SmartPi-armbian/releases/latest/download"
 
-# Utilisateur de base
+# Base User
 BASE_ADD_USER="yes"
 BASE_USER="pi"
 BASE_USER_PASSWORD="yumi"
 
-# Paramètres pour SBC non-RPI
+# Needed while building for non rpi sbc
 BASE_DISTRO="armbian"
 BASE_IMAGE_RASPBIAN="no"
 
-# Redimensionnement de la partition
+# partition resizing
 BASE_ROOT_PARTITION="2"
 BASE_IMAGE_ENLARGEROOT=2500
 BASE_IMAGE_RESIZEROOT=600
-
-# Point de montage de la partition de démarrage
+# Set boot partition mountpoint
 BASE_BOOT_MOUNT_PATH="/boot/"
-
-# Compression (inutile car le workflow gère déjà la compression)
+# Compress not needed due compression done in workflow
 BASE_RELEASE_COMPRESS=no
-
-# Définition des modules
+# Modules are valid for 32bit and 64bit images
 MODULES="base,pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar)"
 
-# Export des variables
+# export Variables
 export DOWNLOAD_BASE_URL
 export BASE_ADD_USER
 export BASE_USER
@@ -41,14 +40,3 @@ export BASE_IMAGE_RESIZEROOT
 export BASE_BOOT_MOUNT_PATH
 export BASE_RELEASE_COMPRESS
 export MODULES
-
-# Débogage pour vérifier MODULES
-echo "MODULES=${MODULES}"
-
-# Vérification de l'exportation des variables
-if [[ -z "${DOWNLOAD_BASE_URL}" || -z "${BASE_USER}" || -z "${MODULES}" ]]; then
-    echo "Erreur : Une ou plusieurs variables nécessaires ne sont pas définies."
-    exit 1
-fi
-
-echo "Script exécuté avec succès."
