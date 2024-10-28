@@ -85,4 +85,4 @@ runs:
         FILENAME=$(basename ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }})
         wget -O ${FILENAME} ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }}
         FILE_CONTENT=$(head -n 1 $FILENAME)
-        CHECKSUM=$(echo $FILE_CONTENT | cut -d' ' -f
+        CHECKSUM=$(echo $FILE_CONTENT) | cut -d' ' -f
