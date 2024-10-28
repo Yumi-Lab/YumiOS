@@ -15,10 +15,10 @@ inputs:
     default: "devel"
 outputs:
   type:
-    description: SBC type (raspberry/armbian/...)
+    description: SBC type (raspberry/armbian,...)
     value: ${{ steps.config.outputs.TYPE }}
   sbc:
-    description: SBC model (rpi32/orangepi4lts/...)
+    description: SBC model (rpi32/orangepi4lts,...)
     value: ${{ steps.config.outputs.SBC }}
 
 runs:
@@ -71,6 +71,11 @@ runs:
         echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}" >> $GITHUB_OUTPUT
         echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}" >> $GITHUB_OUTPUT
         echo "MODULES=${MODULES}" >> $GITHUB_OUTPUT
+
+    - name: Create Image Directory
+      shell: bash
+      run: |
+        mkdir -p repository/src/image
 
     - name: Base Image Checksum
       id: checksum
