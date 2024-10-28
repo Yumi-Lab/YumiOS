@@ -28,7 +28,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip python3-venv
+        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip python3-venv git
 
     - name: Set up Python Virtual Environment
       shell: bash
