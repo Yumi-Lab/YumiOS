@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+#### Smartpad Specific Tweaks for armbian images
+####
+#### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
+#### Copyright 2023 - till today
+#### https://github.com/KwadFan
+####
+#### This File is distributed under GPLv3
+####
+
+# shellcheck enable=require-variable-braces
+# Source error handling, leave this in place
+set -Ee
+
+# Source CustomPIOS common.sh
+# shellcheck disable=SC1091
+source /common.sh
+install_cleanup_trap
+
+### Helper func
+is_board_type() {
+    local board releasefile
+    board=""
+    releasefile="/etc/armbian-release"
+    if [[ -f "${releasefile}" ]]; then
+        board="$(grep "BOARD=" "${releasefile}" | cut -d'=' -f2)"
+    fi
+    echo "${board}"
+}
+
+echo_green "Apply SmartPad specific patches..."
+unpack /filesystem/root /
+if [[ -f /etc/X11/xorg.conf.d/03-smartpad-rotate-touch.conf ]]; then
+    rm -fv /etc/X11/xorg.conf.d/03-smartpad-rotate-touch.conf
+fi
+
+echo_green "Apply SmartPad specific patches... [DONE]"
+
+
+### Enable Serial and SPI connections by default
+if [[ "$(is_board_type)" == "smartpad" ]]; then
+    echo_green "Enable Serial and SPI interface on SmartPad..."
+    echo "overlays=spi-spidev uart1 uart2" >> "${SMARTPAD_CONFIG_TXT_FILE}"
+    echo "param_spidev_spi_bus=1" >> "${SMARTPAD_CONFIG_TXT_FILE}"
+    echo_green "Enable Serial and SPI interface on SmartPad... DONE!"
+fi
+
+### Install plymouth theme and install yumi Plymouth repository
+echo_green "Install Yumi Lab Plymouth theme on SmartPad..."
+
+smartpad_install_theme() {
+    local src dest
+    dest="/usr/share/plymouth/themes/"
+    src="/home/${BASE_USER}/$(basename "${SMARTPAD_PLYMOUTH_REPO/.git/}")"
+    src="${src}/pack_2/hexagon_alt"
+    if [[ -d "${src}" ]]; then
+        sudo cp -vr "${src}" "${dest}"
+    fi
+    echo_green "Set default theme to ${SMARTPAD_PLYMOUTH_THEME} ..."
+    sudo plymouth-set-default-theme "${SMARTPAD_PLYMOUTH_THEME}"
+}
+
+pushd "/home/${BASE_USER}" &>/dev/null
+sudo -u "${BASE_USER}" git clone "${SMARTPAD_PLYMOUTH_REPO}"
+smartpad_install_theme
+popd &>/dev/null
+
+echo_green "Install Yumi Lab Plymouth theme on SmartPad... [DONE]"
+
+echo_green "Install yumi-config smartpad_generic ..."
+pushd "/home/${BASE_USER}" &>/dev/null
+sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/yumi-config.git
+cd yumi-config
+chmod +x ./install.sh
+./install.sh
+cd ..
+popd &>/dev/null
+echo_green "Install yumi-config smartpad_generic ... [DONE]"
+
+echo_green "Install YUMI_SYNC ..."
+pushd "/home/${BASE_USER}" &>/dev/null
+sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_SYNC.git
+cd YUMI_SYNC
+make install
+cd ..
+popd &>/dev/null
+echo_green "Install YUMI_SYNC ... [DONE]"
+
+echo_green "Install moonraker-yumi-lab ..."
+pushd "/home/${BASE_USER}" &>/dev/null
+sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/moonraker-yumi-lab.git
+cd moonraker-yumi-lab
+chmod +x ./install.sh
+sudo -u "${BASE_USER}" ./install.sh -C "/home/pi/printer_data/config/moonraker.conf"\
+    -p 7125 -H 127.0.0.1 -l /home/pi/printer_data/logs \
+    -L -S "https://app.yumi-lab.com"
+cd ..
+popd &>/dev/null
+echo_green "Install moonraker-yumi-lab ... [DONE]"
+
+echo_green "Install KlipperScreen preconfiguration..."
+unpack /filesystem/home/"${BASE_USER}" /home/"${BASE_USER}" "${BASE_USER}"
+
+echo_green "Disable KlipperScreen for first boot service..."
+systemctl_if_exists disable KlipperScreen.service
+
+echo_green "Enable first boot service..."
+systemctl_if_exists enable firstboot.service
+
+
+echo_green "Install klipper's linux_host_mcu ..."
+if [[ -d "/home/${BASE_USER}/yumi-config" ]]; then
+    echo "Copying config ..."
+    cp -v "/home/${BASE_USER}/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" \
+        "/home/${BASE_USER}/klipper/.config"
+    pushd "/home/${BASE_USER}/klipper" &>/dev/null
+    echo "Compile linux_mcu ..."
+    sudo -u "${BASE_USER}" make -j"$(nproc)"
+    echo "Install linux_mcu ..."
+    sudo -u "${BASE_USER}" make flash
+    echo "Cleanup ..."
+    sudo -u "${BASE_USER}" make clean
+    sudo -u "${BASE_USER}" make distclean
+    echo "Copy service file ..."
+    cp -v "/home/${BASE_USER}/klipper/scripts/klipper-mcu.service" \
+        "/etc/systemd/system"
+    echo "Enable klipper-mcu.service ..."
+    systemctl_if_exists enable klipper-mcu.service
+    echo_green "Install klipper's linux_host_mcu ... [DONE]"
+else
+    echo_red "WARNING! yumi-config repository not found! Abort install..."
+fi
+
+echo_green "Install YUMI_PLR ..."
+pushd "/home/${BASE_USER}" &>/dev/null
+sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_PLR.git
+cd YUMI_PLR
+chmod +x ./install.sh
+./install.sh
+cd ..
+popd &>/dev/null
+echo_green "Install YUMI_PLR ... [DONE]"
