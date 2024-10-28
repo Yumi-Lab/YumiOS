@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
-# Shebang for better file detection
+# Shebang pour une meilleure détection du fichier
 # shellcheck enable=require-variable-braces
 # shellcheck disable=SC2034
 
-
-
-# Image source
+# Source de l'image
 DOWNLOAD_URL_CHECKSUM="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz.sha256"
 DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz"
 
+# Paramètres pour redimensionner l'image
 BASE_IMAGE_ENLARGEROOT=6000
-MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad,usb-automount,tmc-autotune,cpu_governor))"
 
-# export Variables
+# Définition des modules avec structure corrigée
+ARMBIAN_MODULES="armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad,usb-automount,tmc-autotune,cpu_governor"
+MODULES="base(pkgupgrade,udev_fix,armbian(${ARMBIAN_MODULES}))"
+
+# Export des variables
 export BASE_ARCH
 export DOWNLOAD_URL_CHECKSUM
 export DOWNLOAD_URL_IMAGE
+export BASE_IMAGE_ENLARGEROOT
+export MODULES
+
+# Débogage pour vérifier MODULES
+echo "MODULES=${MODULES}"
