@@ -1,5 +1,5 @@
 Developer Certificate of Origin
-Version 1.1
+Version 1.2
 
 Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
 1 Letterman Drive
