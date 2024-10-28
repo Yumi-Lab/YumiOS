@@ -27,6 +27,11 @@ runs:
     - name: Install Dependencies
       shell: bash
       run: sudo apt update; sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
+      
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        pip3 install gitpython
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
