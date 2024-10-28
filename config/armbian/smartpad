@@ -10,9 +10,10 @@ DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz"
 # Paramètres pour redimensionner l'image
 BASE_IMAGE_ENLARGEROOT=6000
 
-# Définition des modules avec structure corrigée
+# Définition des modules sans parenthèses pour éviter l'erreur
+BASE_MODULES="base,pkgupgrade,udev_fix"
 ARMBIAN_MODULES="armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad,usb-automount,tmc-autotune,cpu_governor"
-MODULES="base(pkgupgrade,udev_fix,armbian(${ARMBIAN_MODULES}))"
+MODULES="${BASE_MODULES},armbian(${ARMBIAN_MODULES})"
 
 # Export des variables
 export BASE_ARCH

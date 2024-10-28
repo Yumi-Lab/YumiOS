@@ -25,9 +25,10 @@ BASE_BOOT_MOUNT_PATH="/boot/"
 # Compression (inutile car le workflow gère déjà la compression)
 BASE_RELEASE_COMPRESS=no
 
-# Définition des modules avec une structure corrigée
+# Définition des modules sans parenthèses pour éviter l'erreur
+BASE_MODULES="base,pkgupgrade,udev_fix"
 ARMBIAN_MODULES="armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar"
-MODULES="base,pkgupgrade,udev_fix,armbian(${ARMBIAN_MODULES})"
+MODULES="${BASE_MODULES},${ARMBIAN_MODULES}"
 
 # Export des variables
 export DOWNLOAD_BASE_URL
