@@ -143,6 +143,11 @@ runs:
         source venv/bin/activate
         cd repository/src && ../../CustomPiOS/src/update-custompios-paths
 
+    - name: Generate Board Config
+      shell: bash
+      run: |
+        source venv/bin/activate
+        python CustomPiOS/src/custompios_core/generate_board_config.py /tmp/tmp.vUK3BMUsGg
 
     - name: Build Image
       shell: bash
