@@ -26,9 +26,7 @@ BASE_BOOT_MOUNT_PATH="/boot/"
 BASE_RELEASE_COMPRESS=no
 
 # Définition des modules
-BASE_MODULES="base,pkgupgrade,udev_fix"
-ARMBIAN_MODULES="armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar"
-MODULES="${BASE_MODULES},${ARMBIAN_MODULES}"
+MODULES="base,pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar)"
 
 # Export des variables
 export DOWNLOAD_BASE_URL
