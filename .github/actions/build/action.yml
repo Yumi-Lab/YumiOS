@@ -123,13 +123,13 @@ runs:
     - name: Update CustomPiOS Paths
       shell: bash
       run: |
-        source venv/bin/activate  # Activate venv here
+        source venv/bin/activate  # Assurez-vous que venv est activé ici
         cd repository/src && ../../CustomPiOS/src/update-custompios-paths
 
     - name: Build Image
       shell: bash
       run: |
-        source venv/bin/activate  # Ensure venv is activated
+        source venv/bin/activate  # Activez venv ici aussi
         sudo modprobe loop && cd repository/src && sudo bash -x ./build_dist
 
     - name: Cleanup workspace & fix permissions
