@@ -35,6 +35,12 @@ runs:
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
 
+    - name: Create Image Directory
+      shell: bash
+      run: |
+        mkdir -p repository/src/image
+        echo "Directory repository/src/image created or already exists."
+
     - name: Read board config
       id: config
       shell: bash
@@ -46,6 +52,7 @@ runs:
         echo "TYPE=${TYPE}" >> $GITHUB_OUTPUT
         echo "SBC=${SBC}" >> $GITHUB_OUTPUT
 
+        # Check and concatenate configuration files
         GENERIC_FILE="./repository/config/default"
         if [[ -f "$GENERIC_FILE" ]]; then
           cat "${GENERIC_FILE}" >> ./repository/src/config
@@ -76,11 +83,11 @@ runs:
       id: checksum
       shell: bash
       run: |
-        cd repository/src/image
+        cd repository/src/image || { echo "Failed to enter repository/src/image"; exit 1; }
         FILENAME=$(basename ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }})
-        wget -O ${FILENAME} ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }}
-        FILE_CONTENT=$(head -n 1 $FILENAME)
-        CHECKSUM=$(echo $FILE_CONTENT | cut -d' ' -f1)
+        wget -O "${FILENAME}" ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }}
+        FILE_CONTENT=$(head -n 1 "${FILENAME}")
+        CHECKSUM=$(echo "${FILE_CONTENT}" | cut -d' ' -f1)
 
         echo "CHECKSUM=${CHECKSUM}" >> $GITHUB_OUTPUT
         echo "FILENAME=${FILENAME}" >> $GITHUB_OUTPUT
@@ -107,7 +114,7 @@ runs:
     - name: Comparing Checksums
       shell: bash
       run: |
-        cd repository/src/image
+        cd repository/src/image || { echo "Failed to enter repository/src/image"; exit 1; }
         sha256sum -b ${{ steps.checksum.outputs.FILENAME }}
 
     - name: Update CustomPiOS Paths
