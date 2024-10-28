@@ -8,17 +8,17 @@ inputs:
   custompios-repository:
     description: "Repository for CustomPiOS"
     required: false
-    default: "Maxime3d77/CustomPiOS"
+    default: "guysoft/CustomPiOS"
   custompios-ref:
     description: "Branch / Tag / SHA to checkout CustomPiOS"
     required: false
     default: "devel"
 outputs:
   type:
-    description: SBC type (raspberry/armbian...)
+    description: SBC type (raspberry/armbian/...)
     value: ${{ steps.config.outputs.TYPE }}
   sbc:
-    description: SBC model (rpi32/orangepi4lts...)
+    description: SBC model (rpi32/orangepi4lts/...)
     value: ${{ steps.config.outputs.SBC }}
 
 runs:
@@ -26,33 +26,7 @@ runs:
   steps:
     - name: Install Dependencies
       shell: bash
-      run: |
-        echo "Installing dependencies..."
-        sudo apt update
-        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip python3-venv git
-
-    - name: Set up Python Virtual Environment
-      shell: bash
-      run: |
-        echo "Setting up Python virtual environment..."
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install gitpython pyyaml  # Ajoutez pyyaml ici
-        pip freeze | grep -E "GitPython|PyYAML"  # Vérifiez les installations
-
-    - name: Test GitPython Import
-      shell: bash
-      run: |
-        echo "Testing GitPython import..."
-        source venv/bin/activate
-        python -c "import git; print('GitPython is installed and working')"
-
-    - name: Test PyYAML Import
-      shell: bash
-      run: |
-        source venv/bin/activate
-        python -c "import yaml; print('PyYAML is installed and working')"
+      run: sudo apt update; sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
@@ -60,12 +34,6 @@ runs:
         repository: ${{ inputs.custompios-repository }}
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
-
-    - name: Create Image Directory
-      shell: bash
-      run: |
-        mkdir -p repository/src/image
-        echo "Directory repository/src/image created or already exists."
 
     - name: Read board config
       id: config
@@ -78,7 +46,6 @@ runs:
         echo "TYPE=${TYPE}" >> $GITHUB_OUTPUT
         echo "SBC=${SBC}" >> $GITHUB_OUTPUT
 
-        # Check and concatenate configuration files
         GENERIC_FILE="./repository/config/default"
         if [[ -f "$GENERIC_FILE" ]]; then
           cat "${GENERIC_FILE}" >> ./repository/src/config
@@ -109,11 +76,11 @@ runs:
       id: checksum
       shell: bash
       run: |
-        cd repository/src/image || { echo "Failed to enter repository/src/image"; exit 1; }
+        cd repository/src/image
         FILENAME=$(basename ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }})
-        wget -O "${FILENAME}" ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }}
-        FILE_CONTENT=$(head -n 1 "${FILENAME}")
-        CHECKSUM=$(echo "${FILE_CONTENT}" | cut -d' ' -f1)
+        wget -O ${FILENAME} ${{ steps.config.outputs.DOWNLOAD_URL_CHECKSUM }}
+        FILE_CONTENT=$(head -n 1 $FILENAME)
+        CHECKSUM=$(echo $FILE_CONTENT | cut -d' ' -f1)
 
         echo "CHECKSUM=${CHECKSUM}" >> $GITHUB_OUTPUT
         echo "FILENAME=${FILENAME}" >> $GITHUB_OUTPUT
@@ -140,41 +107,16 @@ runs:
     - name: Comparing Checksums
       shell: bash
       run: |
-        cd repository/src/image || { echo "Failed to enter repository/src/image"; exit 1; }
+        cd repository/src/image
         sha256sum -b ${{ steps.checksum.outputs.FILENAME }}
 
     - name: Update CustomPiOS Paths
       shell: bash
-      run: |
-        source venv/bin/activate
-        cd repository/src && ../../CustomPiOS/src/update-custompios-paths
-
-    - name: Generate Board Config
-      shell: bash
-      run: |
-        source venv/bin/activate
-        python CustomPiOS/src/custompios_core/generate_board_config.py /tmp/tmp.vUK3BMUsGg
+      run: cd repository/src && ../../CustomPiOS/src/update-custompios-paths
 
     - name: Build Image
       shell: bash
-      run: |
-        sudo modprobe loop
-        cd repository/src
-        echo "Running build_dist script..."
-        sudo bash -x ./build_dist
-        echo "Finished building image."
-        echo "Listing files in repository/src/workspace after build:"
-        ls -l repository/src/workspace
-
-    - name: Check for Image File
-      shell: bash
-      run: |
-        if compgen -G "repository/src/workspace/*.img" > /dev/null; then
-          echo "Image file found."
-        else
-          echo "No image file found in repository/src/workspace."
-          exit 1
-        fi
+      run: sudo modprobe loop && cd repository/src && sudo bash -x ./build_dist
 
     - name: Cleanup workspace & fix permissions
       if: success()
