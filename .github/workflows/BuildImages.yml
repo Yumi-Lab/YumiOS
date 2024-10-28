@@ -19,7 +19,6 @@ on:
       - ".github/workflows/BuildImages.yml"
       - ".github/scripts/setup_matrix.py"
       - ".github/workflow_config.yml"
-
   workflow_dispatch:
 
 # Allow to stop obsolete workflows
@@ -58,13 +57,22 @@ jobs:
           path: repository
           submodules: true
 
+      - name: Afficher la configuration du build
+        run: |
+          echo "Configuration du build : ${{ matrix.config }}"
+        
+      - name: Afficher le contenu du script de construction
+        run: |
+          echo "Contenu de repository/.github/actions/build:"
+          cat repository/.github/actions/build/* || echo "Pas de fichier dans le répertoire."
+
       - name: Build image
         id: build
         uses: ./repository/.github/actions/build
         with:
           config: "${{ matrix.config }}"
 
-      - name: Rename image file
+      - name: Renommer le fichier image
         id: move-image
         if: always()
         shell: bash
@@ -72,7 +80,7 @@ jobs:
           source repository/src/config
           NOW="$(date +"%Y-%m-%d")"
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
-
+          
           mv repository/src/workspace/*.img "$IMAGE.img"
 
           echo "image=$IMAGE" >> $GITHUB_OUTPUT
@@ -84,14 +92,14 @@ jobs:
           name: failed-${{ steps.move-image.outputs.image }}.log
           path: repository/src/build.log
 
-      - name: Compressing Image
+      - name: Compression de l'image
         shell: bash
         run: |
           CPU_COUNT="$(nproc)"
           echo -e "\e[32mUsing ${CPU_COUNT} Cores for compression...\e[0m"
           xz -efkvz9T"${CPU_COUNT}" "$IMAGE.img" || true
 
-      - name: Calculating checksums
+      - name: Calculer les checksums
         shell: bash
         run: |
           sha256sum "$IMAGE.img" > "$IMAGE.img.sha256"
