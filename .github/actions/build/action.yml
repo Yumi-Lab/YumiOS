@@ -36,7 +36,7 @@ runs:
         python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-        python3 -m pip install gitpython
+        pip install gitpython
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
@@ -122,12 +122,14 @@ runs:
 
     - name: Update CustomPiOS Paths
       shell: bash
-      run: cd repository/src && ../../CustomPiOS/src/update-custompios-paths
+      run: |
+        source venv/bin/activate  # Activate venv here
+        cd repository/src && ../../CustomPiOS/src/update-custompios-paths
 
     - name: Build Image
       shell: bash
       run: |
-        source venv/bin/activate
+        source venv/bin/activate  # Ensure venv is activated
         sudo modprobe loop && cd repository/src && sudo bash -x ./build_dist
 
     - name: Cleanup workspace & fix permissions
