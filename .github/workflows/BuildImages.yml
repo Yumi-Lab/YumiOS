@@ -1,7 +1,8 @@
 name: Build Image
+
 on:
   push:
-    branches:
+    branches: 
       - "develop"
     paths:
       - "src/modules/**"
@@ -10,8 +11,6 @@ on:
       - ".github/workflows/BuildImages.yml"
       - ".github/workflow_config.yml"
       - ".github/scripts/setup_matrix.py"
-    tags-ignore:
-      - "**"
   pull_request:
     types: [opened, edited, reopened, synchronize]
     paths:
@@ -25,14 +24,14 @@ on:
 
 # Allow to stop obsolete workflows
 concurrency:
-  group: ci-buildtrain-${{ github.ref }}-1
+  group: ci-buildtrain-"${{ github.ref }}"-1
   cancel-in-progress: true
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: "${{ steps.set-matrix.outputs.matrix }}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,7 +42,7 @@ jobs:
           PY_INT=$(command -v python3)
           CONFIG="${{ github.workspace }}/.github/workflow_config.yml"
           GROUP="buildtest"
-          $PY_INT ${{ github.workspace }}/.github/scripts/setup_matrix.py -c $CONFIG -g $GROUP --git
+          $PY_INT "${{ github.workspace }}/.github/scripts/setup_matrix.py" -c "$CONFIG" -g "$GROUP" --git
 
   build:
     needs: setup
@@ -51,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: ${{ fromJson(needs.setup.outputs.matrix) }}
+        config: "${{ fromJson(needs.setup.outputs.matrix) }}"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -63,7 +62,7 @@ jobs:
         id: build
         uses: ./repository/.github/actions/build
         with:
-          config: ${{ matrix.config }}
+          config: "${{ matrix.config }}"
 
       - name: Rename image file
         id: move-image
@@ -74,9 +73,9 @@ jobs:
           NOW="$(date +"%Y-%m-%d")"
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
 
-          mv repository/src/workspace/*.img $IMAGE.img
+          mv repository/src/workspace/*.img "$IMAGE.img"
 
-          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+          echo "image=$IMAGE" >> $GITHUB_OUTPUT
 
       - name: Upload failed Logfile
         if: failure()
@@ -90,28 +89,28 @@ jobs:
         run: |
           CPU_COUNT="$(nproc)"
           echo -e "\e[32mUsing ${CPU_COUNT} Cores for compression...\e[0m"
-          xz -efkvz9T"${CPU_COUNT}" ${{ steps.move-image.outputs.image }}.img || true
+          xz -efkvz9T"${CPU_COUNT}" "$IMAGE.img" || true
 
       - name: Calculating checksums
         shell: bash
         run: |
-          sha256sum ${{ steps.move-image.outputs.image }}.img > ${{ steps.move-image.outputs.image }}.img.sha256
-          sha256sum ${{ steps.move-image.outputs.image }}.img.xz > ${{ steps.move-image.outputs.image }}.img.xz.sha256
+          sha256sum "$IMAGE.img" > "$IMAGE.img.sha256"
+          sha256sum "$IMAGE.img.xz" > "$IMAGE.img.xz.sha256"
 
       - name: Upload Compressed Image
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.move-image.outputs.image }}.img.xz
-          path: ${{ steps.move-image.outputs.image }}.img.xz
+          name: "$IMAGE.img.xz"
+          path: "$IMAGE.img.xz"
 
       - name: Upload Compressed Image Checksum
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.move-image.outputs.image }}.img.xz.sha256
-          path: ${{ steps.move-image.outputs.image }}.img.xz.sha256
+          name: "$IMAGE.img.xz.sha256"
+          path: "$IMAGE.img.xz.sha256"
 
       - name: Upload Image Checksum
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.move-image.outputs.image }}.img.sha256
-          path: ${{ steps.move-image.outputs.image }}.img.sha256
+          name: "$IMAGE.img.sha256"
+          path: "$IMAGE.img.sha256"
