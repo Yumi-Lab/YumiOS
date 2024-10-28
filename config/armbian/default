@@ -25,7 +25,7 @@ BASE_BOOT_MOUNT_PATH="/boot/"
 # Compression (inutile car le workflow gère déjà la compression)
 BASE_RELEASE_COMPRESS=no
 
-# Définition des modules sans parenthèses pour éviter l'erreur
+# Définition des modules
 BASE_MODULES="base,pkgupgrade,udev_fix"
 ARMBIAN_MODULES="armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,crowsnest,sonar"
 MODULES="${BASE_MODULES},${ARMBIAN_MODULES}"
@@ -46,3 +46,11 @@ export MODULES
 
 # Débogage pour vérifier MODULES
 echo "MODULES=${MODULES}"
+
+# Vérification de l'exportation des variables
+if [[ -z "${DOWNLOAD_BASE_URL}" || -z "${BASE_USER}" || -z "${MODULES}" ]]; then
+    echo "Erreur : Une ou plusieurs variables nécessaires ne sont pas définies."
+    exit 1
+fi
+
+echo "Script exécuté avec succès."
