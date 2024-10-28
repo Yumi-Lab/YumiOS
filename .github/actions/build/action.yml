@@ -38,8 +38,8 @@ runs:
         python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-        pip install gitpython
-        pip freeze | grep GitPython
+        pip install gitpython pyyaml  # Ajoutez pyyaml ici
+        pip freeze | grep -E "GitPython|PyYAML"  # Vérifiez les installations
 
     - name: Test GitPython Import
       shell: bash
@@ -47,6 +47,12 @@ runs:
         echo "Testing GitPython import..."
         source venv/bin/activate
         python -c "import git; print('GitPython is installed and working')"
+
+    - name: Test PyYAML Import
+      shell: bash
+      run: |
+        source venv/bin/activate
+        python -c "import yaml; print('PyYAML is installed and working')"
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
