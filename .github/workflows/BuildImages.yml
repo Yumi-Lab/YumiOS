@@ -1,4 +1,4 @@
-name: Build YumiOS
+name: Build Image
 on:
   push:
     branches:
@@ -64,10 +64,11 @@ jobs:
         uses: ./repository/.github/actions/build
         with:
           config: ${{ matrix.config }}
+          custompios-ref: 1.5.0
 
       - name: Rename image file
         id: move-image
-        if: ${{ success() }}
+        if: always()
         shell: bash
         run: |
           source repository/src/config
@@ -79,10 +80,10 @@ jobs:
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
 
       - name: Upload failed Logfile
-        if: ${{ failure() && steps.build.conclusion == 'failure' }}
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: failed-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}.log
+          name: failed-${{ steps.move-image.outputs.image }}.log
           path: repository/src/build.log
 
       - name: Compressing Image
