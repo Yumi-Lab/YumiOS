@@ -32,8 +32,13 @@ runs:
     - name: Install Python Dependencies
       shell: bash
       run: |
-        # Installe le module git nécessaire pour les scripts Python de CustomPiOS
-        pip3 install gitpython
+        # Installe gitpython pour les scripts Python
+        python3 -m pip install gitpython
+
+    - name: Verify GitPython Installation
+      shell: bash
+      run: |
+        python3 -m pip show gitpython || { echo "GitPython non installé, vérifiez l'installation pip"; exit 1; }
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
@@ -70,10 +75,9 @@ runs:
 
         source ./repository/src/config
 
-        echo $DOWNLOAD_URL_CHECKSUM
-        echo $DOWNLOAD_URL_IMAGE
-        echo $MODULES
-        echo $(cat ./repository/src/config)
+        echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}"
+        echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}"
+        echo "MODULES=${MODULES}"
 
         echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}" >> $GITHUB_OUTPUT
         echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}" >> $GITHUB_OUTPUT
