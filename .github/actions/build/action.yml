@@ -8,7 +8,7 @@ inputs:
   custompios-repository:
     description: "Repository for CustomPiOS"
     required: false
-    default: "Maxime3d77/CustomPiOS-Yumi"
+    default: "guysoft/CustomPiOS"
   custompios-ref:
     description: "Branch / Tag / SHA to checkout CustomPiOS"
     required: false
@@ -28,7 +28,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip git
+        run: sudo apt update; sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
@@ -37,7 +37,7 @@ runs:
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
 
-    - name: Read board config
+    -  name: Read board config
       id: config
       shell: bash
       run: |
@@ -73,10 +73,6 @@ runs:
         echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}" >> $GITHUB_OUTPUT
         echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}" >> $GITHUB_OUTPUT
         echo "MODULES=${MODULES}" >> $GITHUB_OUTPUT
-
-    - name: Ensure image directory exists
-      shell: bash
-      run: mkdir -p repository/src/image
 
     - name: Base Image Checksum
       id: checksum
