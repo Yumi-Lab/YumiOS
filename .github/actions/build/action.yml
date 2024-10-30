@@ -24,11 +24,16 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Dependencies
+    - name: Install System Dependencies
       shell: bash
       run: |
-        sudo apt update && sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3-pip
-        pip3 install gitpython  # Installe le module `git` requis par CustomPiOS
+        sudo apt update && sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip
+
+    - name: Install Python Dependencies
+      shell: bash
+      run: |
+        # Installe le module git nécessaire pour les scripts Python de CustomPiOS
+        pip3 install gitpython
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
