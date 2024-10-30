@@ -30,7 +30,7 @@ is_board_type() {
 
 # Base User groups
 # Shameless "stolen" from
-# https://github.com/Maxime3d77/CustomPiOS/blob/devel/src/variants/armbian/pre_chroot_script
+# https://github.com/guysoft/CustomPiOS/blob/devel/src/variants/armbian/pre_chroot_script
 
 if_group_exists_run() {
     group=$1

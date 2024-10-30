@@ -26,5 +26,7 @@ cd automount-usb-klipper/
 sudo ./CONFIGURE.sh
 cd ..
 popd &>/dev/null
+
+sudo chmod 777 -R /home/pi/printer_data
 echo_green "Install USB Mount Scripts... [DONE]"
 

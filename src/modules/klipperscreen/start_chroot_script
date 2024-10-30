@@ -1,64 +1,70 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#### KlipperScreen install module
+####
+#### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
+#### Copyright 2024 - till today
+#### https://github.com/mainsail-crew/MainsailOS
+####
+#### This File is distributed under GPLv3
+####
+# shellcheck enable=require-variable-braces
 
-# Script d'installation automatique de KlipperScreen
-# Ce script est destiné à fonctionner sur des distributions basées sur Debian (Raspberry Pi OS, Ubuntu Server, etc.)
+# Source error handling, leave this in place
+set -Ee
 
-# 1. Mettre à jour le système
-echo "Mise à jour des paquets du système..."
-sudo apt-get update && sudo apt-get upgrade -y
+# Source CustomPIOS common.sh
+# shellcheck disable=SC1091
+source /common.sh
+install_cleanup_trap
 
-# 2. Installer les dépendances nécessaires
-echo "Installation des dépendances..."
-sudo apt-get install -y python3 python3-virtualenv python3-dev libffi-dev libjpeg-dev libfreetype6-dev \
-                    build-essential libopenjp2-7 libtiff5 fonts-freefont-ttf git xinit xorg \
-                    libdrm-dev
+# pip install for KlipperScreen 
+sudo apt install -y python3-pip
+sudo apt install -y python3.11-venv
 
-# 3. Cloner le dépôt KlipperScreen
-echo "Clonage du dépôt KlipperScreen..."
-cd ~
-git clone https://github.com/jordanruthe/KlipperScreen.git
+# Module only Variables
+KS_BUILD_INSTALL_SH="/home/${BASE_USER}/KlipperScreen/scripts/KlipperScreen-install.sh"
+KS_MOONRAKER_CONF_PATH="/home/${BASE_USER}/printer_data/config/moonraker.conf"
 
-# 4. Créer et activer un environnement virtuel Python pour KlipperScreen
-echo "Création d'un environnement virtuel pour KlipperScreen..."
-cd KlipperScreen
-python3 -m venv venv
-source venv/bin/activate
+echo_green "Installing KlipperScreen and enable KlipperScreen Service ..."
 
-# 5. Installer les dépendances Python de KlipperScreen
-echo "Installation des dépendances Python..."
-pip install -r requirements.txt
+## Force apt update
+apt-get update
 
-# 6. Définir les permissions pour la connexion à l'écran
-echo "Configuration des permissions pour l'accès à l'écran..."
-sudo usermod -a -G tty pi  # Remplacez 'pi' par votre nom d'utilisateur si nécessaire
-sudo usermod -a -G video pi
+## Install dependencies
+# shellcheck disable=SC2086
+check_install_pkgs ${KLIPPERSCREEN_DEPS}
 
-# 7. Configurer le service systemd pour KlipperScreen
-echo "Création du service KlipperScreen dans systemd..."
-cat << EOF | sudo tee /etc/systemd/system/klipperscreen.service
-[Unit]
-Description=KlipperScreen
-After=display-manager.service
-Wants=display-manager.service
+## Step 1: Move to Home Dir as WorkingDirectoy
+pushd "/home/${BASE_USER}" &> /dev/null || exit 1
 
-[Service]
-Type=simple
-User=pi
-ExecStart=/home/pi/KlipperScreen/scripts/KlipperScreen
-Environment="DISPLAY=:0"
-Environment="XAUTHORITY=/home/pi/.Xauthority"
-WorkingDirectory=/home/pi/KlipperScreen
-StandardOutput=inherit
-StandardError=inherit
-Restart=always
+## Step 2: clone KlipperScreen repo
+gitclone KLIPPERSCREEN_REPO KlipperScreen
 
-[Install]
-WantedBy=multi-user.target
-EOF
+## Step 3: Move to KlipperScreen as working directory
+pushd "/home/${BASE_USER}/KlipperScreen" &> /dev/null || exit 1
 
-# 8. Activer et démarrer le service KlipperScreen
-echo "Activation et démarrage du service KlipperScreen..."
-sudo systemctl enable klipperscreen.service
-sudo systemctl start klipperscreen.service
+## Step 4: Run KlipperScreen install routine
+echo_green "Launch KlipperScreen install routine ..."
+sudo -u "${BASE_USER}" "${KS_BUILD_INSTALL_SH}"
 
-echo "Installation terminée ! KlipperScreen devrait maintenant fonctionner sur votre écran."
+## Step 5: Update moonraker.conf
+if [[ -f "${KS_MOONRAKER_CONF_PATH}" ]]; then
+    echo_green "Copying temporary file ..."
+    unpack /filesystem/tmp /tmp root
+    cat /tmp/ks_update_entry.txt >> "${KS_MOONRAKER_CONF_PATH}"
+else
+    echo_red "File moonraker.conf not found ... [SKIPPED]"
+fi
+
+## Step 6: Leave KlipperScreen
+popd &> /dev/null || exit 1
+
+## Step 7: leave home dir
+popd &> /dev/null || exit 1
+
+## Step 8: Enable service
+echo_green "Enable KlipperScreen.service ..."
+systemctl_if_exists enable KlipperScreen.service
+
+## Finish
+echo_green "Installing KlipperScreen and enable KlipperScreen Service ... DONE!"
