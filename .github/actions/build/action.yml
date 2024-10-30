@@ -52,7 +52,7 @@ runs:
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
 
-        - name: Read board config
+    - name: Read board config
       id: config
       shell: bash
       run: |
