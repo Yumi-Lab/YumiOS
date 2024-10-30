@@ -8,42 +8,27 @@ inputs:
   custompios-repository:
     description: "Repository for CustomPiOS"
     required: false
-    default: "guysoft/CustomPiOS"
+    default: "Maxime3d77/CustomPiOS-Yumi"
   custompios-ref:
     description: "Branch / Tag / SHA to checkout CustomPiOS"
     required: false
     default: "devel"
 outputs:
   type:
-    description: SBC type (raspberry/armbian...)
+    description: SBC type (raspberry/armbian/...)
     value: ${{ steps.config.outputs.TYPE }}
   sbc:
-    description: SBC model (rpi32/orangepi4lts...)
+    description: SBC model (rpi32/orangepi4lts/...)
     value: ${{ steps.config.outputs.SBC }}
 
 runs:
   using: "composite"
   steps:
-    - name: Install System Dependencies
+    - name: Install Dependencies
       shell: bash
       run: |
-        sudo apt update && sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3 python3-pip
-
-    - name: Install Python Dependencies
-      shell: bash
-      run: |
-        # Installer gitpython pour les scripts Python
-        python3 -m pip install --user gitpython
-        # Ajouter d'autres dépendances si nécessaire
-        python3 -m pip install --user -r requirements.txt || echo "Aucun fichier requirements.txt"
-
-    - name: Verify GitPython Installation
-      shell: bash
-      run: |
-        if ! python3 -m pip show gitpython; then
-          echo "GitPython non installé, vérifiez l'installation pip"
-          exit 1
-        fi
+        sudo apt update
+        sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip git
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
