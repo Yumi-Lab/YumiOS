@@ -73,6 +73,7 @@ runs:
         echo "MODULES=${MODULES}" >> $GITHUB_OUTPUT
 
     - name: Ensure image directory exists
+      shell: bash
       run: mkdir -p repository/src/image
 
     - name: Base Image Checksum
