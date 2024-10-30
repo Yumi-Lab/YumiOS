@@ -12,6 +12,7 @@ set -e
 
 # Debug ...
 # set -x
+echo "Démarrage du script firstboot..."
 
 DIALOGRC=/.firstboot
 export DIALOGRC
@@ -23,6 +24,7 @@ RESOLUTION=(20 60)
 chvt 2
 
 if [[ "$(systemctl is-active KlipperScreen.service)" = "active" ]]; then
+    echo "Le service KlipperScreen est actif, il sera arrêté pour le premier démarrage."
     systemctl stop KlipperScreen.service &>/dev/null
 fi
 
@@ -59,8 +61,15 @@ enable_ks() {
 }
 
 disable_firstboot() {
+    if systemctl list-unit-files | grep -q firstboot; then
+    systemctl disable firstboot.service
+    rm -f /etc/systemd/system/firstboot.service
+    else
+        echo "Le service firstboot n'a pas été trouvé pour la suppression."
+    fi
     systemctl --quiet disable firstboot.service &>/dev/null
     rm -f /etc/systemd/system/firstboot.service &>/dev/null
+
 }
 
 # Welcome msg

@@ -27,6 +27,13 @@ is_board_type() {
     fi
     echo "${board}"
 }
+[[ -n "$BASE_USER" ]] || BASE_USER="pi"  # Remplacez "pi" par l'utilisateur principal si nécessaire
+
+if ! command -v git &>/dev/null; then
+    echo "Git n'est pas installé, veuillez l'installer avant de continuer."
+    exit 1
+fi
+
 
 echo_green "Apply SmartPad specific patches..."
 unpack /filesystem/root /
@@ -58,6 +65,14 @@ smartpad_install_theme() {
     fi
     echo_green "Set default theme to ${SMARTPAD_PLYMOUTH_THEME} ..."
     sudo plymouth-set-default-theme "${SMARTPAD_PLYMOUTH_THEME}"
+
+    if [[ -d "${src}" ]]; then
+    echo "Clonage réussi et thème disponible pour installation."
+else
+    echo "Erreur: Thème Plymouth introuvable après clonage."
+    exit 1
+fi
+
 }
 
 pushd "/home/${BASE_USER}" &>/dev/null
@@ -82,6 +97,12 @@ pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_SYNC.git
 cd YUMI_SYNC
 make install
+# Pour YUMI_SYNC
+if [[ ! -x "$(command -v YUMI_SYNC)" ]]; then
+    echo "Erreur: YUMI_SYNC n’a pas été installé correctement."
+    exit 1
+fi
+
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_SYNC ... [DONE]"
@@ -138,5 +159,10 @@ cd YUMI_PLR
 chmod +x ./install.sh
 ./install.sh
 cd ..
+# Pour YUMI_PLR
+if [[ ! -d "/home/${BASE_USER}/YUMI_PLR" ]]; then
+    echo "Erreur: YUMI_PLR n’a pas été installé correctement."
+    exit 1
+fi
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
