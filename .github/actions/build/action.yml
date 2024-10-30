@@ -34,6 +34,8 @@ runs:
       run: |
         # Installer gitpython pour les scripts Python
         python3 -m pip install --user gitpython
+        # Ajouter d'autres dépendances si nécessaire
+        python3 -m pip install --user -r requirements.txt || echo "Aucun fichier requirements.txt"
 
     - name: Verify GitPython Installation
       shell: bash
@@ -61,17 +63,17 @@ runs:
         echo "TYPE=${TYPE}" >> $GITHUB_OUTPUT
         echo "SBC=${SBC}" >> $GITHUB_OUTPUT
 
-        GENERIC_FILE="./repository/config/default"
+        GENERIC_FILE="./CustomPiOS/config/default"
         if [[ -f "$GENERIC_FILE" ]]; then
           cat "${GENERIC_FILE}" >> ./repository/src/config
         fi
 
-        TYPE_FILE="./repository/config/${TYPE}/default"
+        TYPE_FILE="./CustomPiOS/config/${TYPE}/default"
         if [[ -f "$TYPE_FILE" ]]; then
           cat "${TYPE_FILE}" >> ./repository/src/config
         fi
 
-        SBC_FILE="./repository/config/${TYPE}/${SBC}"
+        SBC_FILE="./CustomPiOS/config/${TYPE}/${SBC}"
         if [[ -f "$SBC_FILE" ]]; then
           cat "${SBC_FILE}" >> ./repository/src/config
         fi
