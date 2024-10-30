@@ -15,10 +15,10 @@ inputs:
     default: "devel"
 outputs:
   type:
-    description: SBC type (raspberry/armbian/...)
+    description: SBC type (raspberry/armbian...)
     value: ${{ steps.config.outputs.TYPE }}
   sbc:
-    description: SBC model (rpi32/orangepi4lts/...)
+    description: SBC model (rpi32/orangepi4lts...)
     value: ${{ steps.config.outputs.SBC }}
 
 runs:
@@ -63,22 +63,36 @@ runs:
         echo "TYPE=${TYPE}" >> $GITHUB_OUTPUT
         echo "SBC=${SBC}" >> $GITHUB_OUTPUT
 
-        GENERIC_FILE="./CustomPiOS/config/default"
+        CONFIG_DIR="./CustomPiOS/config"
+        CONFIG_FILE="./repository/src/config"
+
+        # Créer le fichier de configuration s'il n'existe pas
+        mkdir -p ./repository/src  # Assurez-vous que le répertoire src existe
+        touch "$CONFIG_FILE"
+
+        GENERIC_FILE="${CONFIG_DIR}/default"
         if [[ -f "$GENERIC_FILE" ]]; then
-          cat "${GENERIC_FILE}" >> ./repository/src/config
+          cat "${GENERIC_FILE}" >> "$CONFIG_FILE"
         fi
 
-        TYPE_FILE="./CustomPiOS/config/${TYPE}/default"
+        TYPE_FILE="${CONFIG_DIR}/${TYPE}/default"
         if [[ -f "$TYPE_FILE" ]]; then
-          cat "${TYPE_FILE}" >> ./repository/src/config
+          cat "${TYPE_FILE}" >> "$CONFIG_FILE"
         fi
 
-        SBC_FILE="./CustomPiOS/config/${TYPE}/${SBC}"
+        SBC_FILE="${CONFIG_DIR}/${TYPE}/${SBC}"
         if [[ -f "$SBC_FILE" ]]; then
-          cat "${SBC_FILE}" >> ./repository/src/config
+          cat "${SBC_FILE}" >> "$CONFIG_FILE"
         fi
 
-        source ./repository/src/config
+        # Vérifiez si le fichier de configuration a bien été créé
+        if [[ ! -f "$CONFIG_FILE" ]]; then
+          echo "Le fichier de configuration '$CONFIG_FILE' n'a pas été créé."
+          exit 1
+        fi
+
+        # Source le fichier de configuration
+        source "$CONFIG_FILE"
 
         echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}"
         echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}"
