@@ -52,7 +52,7 @@ runs:
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
 
-    - name: Read board config
+        - name: Read board config
       id: config
       shell: bash
       run: |
@@ -63,40 +63,27 @@ runs:
         echo "TYPE=${TYPE}" >> $GITHUB_OUTPUT
         echo "SBC=${SBC}" >> $GITHUB_OUTPUT
 
-        CONFIG_DIR="./CustomPiOS/config"
-        CONFIG_FILE="./repository/src/config"
-
-        # Créer le fichier de configuration s'il n'existe pas
-        mkdir -p ./repository/src  # Assurez-vous que le répertoire src existe
-        touch "$CONFIG_FILE"
-
-        GENERIC_FILE="${CONFIG_DIR}/default"
+        GENERIC_FILE="./repository/config/default"
         if [[ -f "$GENERIC_FILE" ]]; then
-          cat "${GENERIC_FILE}" >> "$CONFIG_FILE"
+          cat "${GENERIC_FILE}" >> ./repository/src/config
         fi
 
-        TYPE_FILE="${CONFIG_DIR}/${TYPE}/default"
+        TYPE_FILE="./repository/config/${TYPE}/default"
         if [[ -f "$TYPE_FILE" ]]; then
-          cat "${TYPE_FILE}" >> "$CONFIG_FILE"
+          cat "${TYPE_FILE}" >> ./repository/src/config
         fi
 
-        SBC_FILE="${CONFIG_DIR}/${TYPE}/${SBC}"
+        SBC_FILE="./repository/config/${TYPE}/${SBC}"
         if [[ -f "$SBC_FILE" ]]; then
-          cat "${SBC_FILE}" >> "$CONFIG_FILE"
+          cat "${SBC_FILE}" >> ./repository/src/config
         fi
 
-        # Vérifiez si le fichier de configuration a bien été créé
-        if [[ ! -f "$CONFIG_FILE" ]]; then
-          echo "Le fichier de configuration '$CONFIG_FILE' n'a pas été créé."
-          exit 1
-        fi
+        source ./repository/src/config
 
-        # Source le fichier de configuration
-        source "$CONFIG_FILE"
-
-        echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}"
-        echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}"
-        echo "MODULES=${MODULES}"
+        echo $DOWNLOAD_URL_CHECKSUM
+        echo $DOWNLOAD_URL_IMAGE
+        echo $MODULES
+        echo $(cat ./repository/src/config)
 
         echo "DOWNLOAD_URL_CHECKSUM=${DOWNLOAD_URL_CHECKSUM}" >> $GITHUB_OUTPUT
         echo "DOWNLOAD_URL_IMAGE=${DOWNLOAD_URL_IMAGE}" >> $GITHUB_OUTPUT
