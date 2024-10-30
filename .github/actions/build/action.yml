@@ -34,6 +34,10 @@ runs:
         repository: ${{ inputs.custompios-repository }}
         ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
+        
+    - name: Create Image Directory
+      shell: bash
+      run: mkdir -p repository/src/image
 
     - name: Read board config
       id: config
