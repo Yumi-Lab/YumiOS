@@ -32,13 +32,16 @@ runs:
     - name: Install Python Dependencies
       shell: bash
       run: |
-        # Installe gitpython pour les scripts Python
-        python3 -m pip install gitpython
+        # Installer gitpython pour les scripts Python
+        python3 -m pip install --user gitpython
 
     - name: Verify GitPython Installation
       shell: bash
       run: |
-        python3 -m pip show gitpython || { echo "GitPython non installé, vérifiez l'installation pip"; exit 1; }
+        if ! python3 -m pip show gitpython; then
+          echo "GitPython non installé, vérifiez l'installation pip"
+          exit 1
+        fi
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
