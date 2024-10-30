@@ -26,7 +26,9 @@ runs:
   steps:
     - name: Install Dependencies
       shell: bash
-      run: sudo apt update && sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
+      run: |
+        sudo apt update && sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip python3-pip
+        pip3 install gitpython  # Installe le module `git` requis par CustomPiOS
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
