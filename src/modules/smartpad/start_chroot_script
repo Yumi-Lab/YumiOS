@@ -102,6 +102,7 @@ sudo make install
 #    echo "Erreur: YUMI_SYNC n’a pas été installé correctement."
 #    exit 1
 #fi
+
 cd ..
 popd &>/dev/null
 echo_green "Install YUMI_SYNC ... [DONE]"
