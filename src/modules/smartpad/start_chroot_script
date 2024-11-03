@@ -126,6 +126,7 @@ echo_green "Disable KlipperScreen for first boot service..."
 systemctl_if_exists disable KlipperScreen.service
 
 echo_green "Enable first boot service..."
+sudo chmod +x /usr/local/bin/firstboot
 systemctl_if_exists enable firstboot.service
 
 
