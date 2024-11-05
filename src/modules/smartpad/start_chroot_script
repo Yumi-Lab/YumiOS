@@ -167,3 +167,7 @@ if [[ ! -d "/home/${BASE_USER}/YUMI_PLR" ]]; then
 fi
 popd &>/dev/null
 echo_green "Install YUMI_PLR ... [DONE]"
+
+echo_green "ACL printer_data ..."
+sudo chmod 777 -R /home/pi/printer_data/
+echo_green "ACL printer_data ... [DONE]"
