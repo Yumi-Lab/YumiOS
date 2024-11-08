@@ -23,6 +23,7 @@ echo_green "Install USB Mount Scripts..."
 pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/automount-usb-klipper.git
 cd automount-usb-klipper/
+sudo chmod +x CONFIGURE.sh
 sudo ./CONFIGURE.sh
 cd ..
 popd &>/dev/null
