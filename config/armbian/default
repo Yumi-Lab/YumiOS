@@ -5,7 +5,8 @@
 # See https://www.shellcheck.net/wiki/SC2155
 
 # Download Base Url
-DOWNLOAD_BASE_URL="https://github.com/Yumi-Lab/SmartPi-armbian/releases/latest/download"
+#DOWNLOAD_BASE_URL="https://github.com/Yumi-Lab/SmartPi-armbian/releases/latest/download"
+DOWNLOAD_BASE_URL="https://github.com/Yumi-Lab/SmartPi-armbian/releases/tag/20240302-2147"
 
 # Base User
 BASE_ADD_USER="yes"
