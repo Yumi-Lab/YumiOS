@@ -6,8 +6,8 @@
 
 
 # Image source
-DOWNLOAD_URL_CHECKSUM="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz.sha256"
-DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server.img.xz"
+DOWNLOAD_URL_CHECKSUM="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server-2025-02-28-0654.img.xz.sha256"
+DOWNLOAD_URL_IMAGE="${DOWNLOAD_BASE_URL}/Yumi-smartpad-bookworm-server-2025-02-28-0654.img.xz"
 
 BASE_IMAGE_ENLARGEROOT=6000
 MODULES="base(pkgupgrade,udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad,usb-automount,tmc-autotune,cpu_governor))"
