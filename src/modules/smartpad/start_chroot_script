@@ -100,6 +100,7 @@ echo_green "Install Yumi Lab Plymouth theme on SmartPad... [DONE]"
 
 echo_green "Install moonraker-yumi-lab ..."
 pushd "/home/${BASE_USER}" &>/dev/null
+unpack /filesystem/home/"${BASE_USER}" /home/"${BASE_USER}" "${BASE_USER}"
 sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/moonraker-yumi-lab.git
 cd moonraker-yumi-lab
 chmod +x ./install.sh
@@ -111,7 +112,7 @@ popd &>/dev/null
 echo_green "Install moonraker-yumi-lab ... [DONE]"
 
 echo_green "Install KlipperScreen preconfiguration..."
-unpack /filesystem/home/"${BASE_USER}" /home/"${BASE_USER}" "${BASE_USER}"
+#unpack /filesystem/home/"${BASE_USER}" /home/"${BASE_USER}" "${BASE_USER}"
 
 echo_green "Disable KlipperScreen for first boot service..."
 systemctl_if_exists disable KlipperScreen.service
