@@ -71,6 +71,8 @@ disable_firstboot() {
     rm -f /etc/systemd/system/firstboot.service &>/dev/null
 
 }
+#police plus grande avec des caractères deux fois plus hauts que la police standard
+setfont /usr/share/consolefonts/Lat15-TerminusBold32x16.psf.gz
 
 # Welcome msg
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
