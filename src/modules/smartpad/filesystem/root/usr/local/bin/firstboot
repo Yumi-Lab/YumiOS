@@ -19,7 +19,7 @@ export DIALOGRC
 DIALOG="$(which dialog)"
 DIALOG=("${DIALOG}" --backtitle "YumiOS for Smartpad")
 #RESOLUTION=(20 60)
-RESOLUTION=(40 100)
+RESOLUTION=(30 80)
 
 #change active tty
 chvt 2
