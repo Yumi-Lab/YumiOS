@@ -163,6 +163,7 @@ MCU_CONFIG="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/linux_mcu.kconfig"
 SERVICE_FILE="/etc/systemd/system/klipper-mcu.service"
 PRECOMPILED_ELF="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/klipper.elf"
 
+
 # Vérifie si le dossier de configuration yumi-config existe
 if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
     echo "✅ Copie du fichier de configuration..."
@@ -174,7 +175,8 @@ if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
     # Vérifie si un fichier ELF est fourni
     if [[ -f "${PRECOMPILED_ELF}" ]]; then
         echo "🔄 Utilisation du fichier .elf précompilé au lieu de recompiler..."
-        cp -v "${PRECOMPILED_ELF}" "${KLIPPER_DIR}/out/klipper_mcu.elf"
+        mkdir -p "${KLIPPER_DIR}/out"
+        cp -v "${PRECOMPILED_ELF}" "${KLIPPER_DIR}/out/klipper.elf"
     else
         echo "🔨 Compilation du firmware Klipper Linux MCU..."
         sudo -u "${BASE_USER}" make -j"$(nproc)"
