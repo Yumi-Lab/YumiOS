@@ -154,12 +154,14 @@ echo_green "Install yumi-config smartpad_generic ... [DONE]"
 #    echo_red "WARNING! yumi-config repository not found! Abort install..."
 #fi
 
-echo "📌 Installation du Klipper Linux MCU..."
+echo "📌 Installation du Klipper Linux MCU avec un fichier précompilé..."
 
+BASE_USER="pi"
 KLIPPER_DIR="/home/${BASE_USER}/klipper"
 YUMI_CONFIG_DIR="/home/${BASE_USER}/yumi-config"
 MCU_CONFIG="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/linux_mcu.kconfig"
 SERVICE_FILE="/etc/systemd/system/klipper-mcu.service"
+PRECOMPILED_ELF="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/klipper.elf"
 
 # Vérifie si le dossier de configuration yumi-config existe
 if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
@@ -169,8 +171,14 @@ if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
     # Accède au répertoire Klipper
     pushd "${KLIPPER_DIR}" &>/dev/null
 
-    echo "🔨 Compilation du firmware Klipper Linux MCU..."
-    sudo -u "${BASE_USER}" make -j"$(nproc)"
+    # Vérifie si un fichier ELF est fourni
+    if [[ -f "${PRECOMPILED_ELF}" ]]; then
+        echo "🔄 Utilisation du fichier .elf précompilé au lieu de recompiler..."
+        cp -v "${PRECOMPILED_ELF}" "${KLIPPER_DIR}/out/klipper_mcu.elf"
+    else
+        echo "🔨 Compilation du firmware Klipper Linux MCU..."
+        sudo -u "${BASE_USER}" make -j"$(nproc)"
+    fi
 
     echo "🚀 Installation du firmware..."
     sudo -u "${BASE_USER}" make flash
