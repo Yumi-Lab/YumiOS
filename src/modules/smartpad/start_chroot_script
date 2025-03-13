@@ -131,27 +131,69 @@ cd ..
 popd &>/dev/null
 echo_green "Install yumi-config smartpad_generic ... [DONE]"
 
-echo_green "Install klipper's linux_host_mcu ..."
-if [[ -d "/home/${BASE_USER}/yumi-config" ]]; then
-    echo "Copying config ..."
-    cp -v "/home/${BASE_USER}/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" \
-        "/home/${BASE_USER}/klipper/.config"
-    pushd "/home/${BASE_USER}/klipper" &>/dev/null
-    echo "Compile linux_mcu ..."
+#echo_green "Install klipper's linux_host_mcu ..."
+#if [[ -d "/home/${BASE_USER}/yumi-config" ]]; then
+#    echo "Copying config ..."
+#    cp -v "/home/${BASE_USER}/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" \
+#        "/home/${BASE_USER}/klipper/.config"
+#    pushd "/home/${BASE_USER}/klipper" &>/dev/null
+#    echo "Compile linux_mcu ..."
+#    sudo -u "${BASE_USER}" make -j"$(nproc)"
+#    echo "Install linux_mcu ..."
+#    sudo -u "${BASE_USER}" make flash
+#    echo "Cleanup ..."
+#    sudo -u "${BASE_USER}" make clean
+#    sudo -u "${BASE_USER}" make distclean
+#    echo "Copy service file ..."
+#    cp -v "/home/${BASE_USER}/klipper/scripts/klipper-mcu.service" \
+#        "/etc/systemd/system"
+#    echo "Enable klipper-mcu.service ..."
+#    systemctl_if_exists enable klipper-mcu.service
+#    echo_green "Install klipper's linux_host_mcu ... [DONE]"
+#else
+#    echo_red "WARNING! yumi-config repository not found! Abort install..."
+#fi
+
+echo "📌 Installation du Klipper Linux MCU..."
+
+KLIPPER_DIR="/home/${BASE_USER}/klipper"
+YUMI_CONFIG_DIR="/home/${BASE_USER}/yumi-config"
+MCU_CONFIG="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/linux_mcu.kconfig"
+SERVICE_FILE="/etc/systemd/system/klipper-mcu.service"
+# Vérifie si le dossier de configuration yumi-config existe
+if [[ -d "$YUMI_CONFIG_DIR" ]]; then
+    echo "✅ Copie du fichier de configuration..."
+    cp -v "$MCU_CONFIG" "${KLIPPER_DIR}/.config"
+
+    # Accède au répertoire Klipper
+    pushd "$KLIPPER_DIR" &>/dev/null
+
+    echo "🔨 Compilation du firmware Klipper Linux MCU..."
     sudo -u "${BASE_USER}" make -j"$(nproc)"
-    echo "Install linux_mcu ..."
+
+    echo "🚀 Installation du firmware..."
     sudo -u "${BASE_USER}" make flash
-    echo "Cleanup ..."
+
+    echo "🧹 Nettoyage des fichiers temporaires..."
     sudo -u "${BASE_USER}" make clean
     sudo -u "${BASE_USER}" make distclean
-    echo "Copy service file ..."
-    cp -v "/home/${BASE_USER}/klipper/scripts/klipper-mcu.service" \
-        "/etc/systemd/system"
-    echo "Enable klipper-mcu.service ..."
-    systemctl_if_exists enable klipper-mcu.service
-    echo_green "Install klipper's linux_host_mcu ... [DONE]"
+
+    # Installation du service systemd
+    echo "📂 Copie du fichier de service systemd..."
+    sudo cp -v "${KLIPPER_DIR}/scripts/klipper-mcu.service" "$SERVICE_FILE"
+
+    echo "🔧 Activation et démarrage du service klipper-mcu..."
+    sudo systemctl enable klipper-mcu.service
+    sudo systemctl start klipper-mcu.service
+
+    echo "👤 Ajout de l'utilisateur au groupe tty..."
+    sudo usermod -a -G tty "$BASE_USER"
+
+    echo "✅ Installation du Klipper Linux MCU terminée avec succès !"
+
 else
-    echo_red "WARNING! yumi-config repository not found! Abort install..."
+    echo "❌ Erreur : Le dossier yumi-config n'existe pas !"
+    exit 1
 fi
 
 echo_green "Install YUMI_PLR ..."
