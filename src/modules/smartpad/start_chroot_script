@@ -160,13 +160,14 @@ KLIPPER_DIR="/home/${BASE_USER}/klipper"
 YUMI_CONFIG_DIR="/home/${BASE_USER}/yumi-config"
 MCU_CONFIG="${YUMI_CONFIG_DIR}/mcu_linux/smart-pi-one/linux_mcu.kconfig"
 SERVICE_FILE="/etc/systemd/system/klipper-mcu.service"
+
 # Vérifie si le dossier de configuration yumi-config existe
-if [[ -d "$YUMI_CONFIG_DIR" ]]; then
+if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
     echo "✅ Copie du fichier de configuration..."
-    cp -v "$MCU_CONFIG" "${KLIPPER_DIR}/.config"
+    cp -v "${MCU_CONFIG}" "${KLIPPER_DIR}/.config"
 
     # Accède au répertoire Klipper
-    pushd "$KLIPPER_DIR" &>/dev/null
+    pushd "${KLIPPER_DIR}" &>/dev/null
 
     echo "🔨 Compilation du firmware Klipper Linux MCU..."
     sudo -u "${BASE_USER}" make -j"$(nproc)"
@@ -180,14 +181,14 @@ if [[ -d "$YUMI_CONFIG_DIR" ]]; then
 
     # Installation du service systemd
     echo "📂 Copie du fichier de service systemd..."
-    sudo cp -v "${KLIPPER_DIR}/scripts/klipper-mcu.service" "$SERVICE_FILE"
+    sudo cp -v "${KLIPPER_DIR}/scripts/klipper-mcu.service" "${SERVICE_FILE}"
 
     echo "🔧 Activation et démarrage du service klipper-mcu..."
     sudo systemctl enable klipper-mcu.service
     sudo systemctl start klipper-mcu.service
 
     echo "👤 Ajout de l'utilisateur au groupe tty..."
-    sudo usermod -a -G tty "$BASE_USER"
+    sudo usermod -a -G tty "${BASE_USER}"
 
     echo "✅ Installation du Klipper Linux MCU terminée avec succès !"
 

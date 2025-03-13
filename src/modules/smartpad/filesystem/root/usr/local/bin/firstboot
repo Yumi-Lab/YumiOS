@@ -18,8 +18,8 @@ DIALOGRC=/.firstboot
 export DIALOGRC
 DIALOG="$(which dialog)"
 DIALOG=("${DIALOG}" --backtitle "YumiOS for Smartpad")
-#RESOLUTION=(20 60)
-RESOLUTION=(30 80)
+RESOLUTION=(20 60)
+#RESOLUTION=(30 60)
 
 #change active tty
 chvt 2
@@ -31,6 +31,7 @@ fi
 
 welcome_msg() {
     cat << EOF
+
 Hello dear YUMI SmartPad One user,
 Please be patient, we have to prepare your first start of your Smartpad!
 
@@ -73,7 +74,8 @@ disable_firstboot() {
 
 }
 #police plus grande avec des caractères deux fois plus hauts que la police standard
-#setfont /usr/share/consolefonts/Lat15-TerminusBold32x16.psf.gz
+setfont /usr/share/consolefonts/Lat15-TerminusBold20x10.psf.gz
+
 
 # Welcome msg
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
