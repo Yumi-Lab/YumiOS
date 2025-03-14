@@ -46,6 +46,7 @@ EOF
 
 reboot_msg() {
     cat << EOF
+
 Your device will be restarted in 5 seconds...
 
 Thank you for being patient and have fun with your new
@@ -79,7 +80,7 @@ setfont /usr/share/consolefonts/Lat15-TerminusBold20x10.psf.gz
 
 # Welcome msg
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
-    --no-cancel --no-ok --pause "$(welcome_msg)" "${RESOLUTION[@]}" 15
+    --no-cancel --no-ok --pause "$(echo -e "welcome_msg")" "${RESOLUTION[@]}" 15
 
 # Init gauge
 sleep 1 | "${DIALOG[@]}" --clear --gauge "Firstboot preperation ..." "${RESOLUTION[@]}" 0
@@ -102,7 +103,7 @@ sleep 2 | "${DIALOG[@]}" --clear --gauge "Finalize Firstboot ..." "${RESOLUTION[
 
 # Show reboot screen
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
-    --no-cancel --no-ok --pause "$(reboot_msg)" "${RESOLUTION[@]}" 5
+    --no-cancel --no-ok --pause "$(echo -e "reboot_msg")" "${RESOLUTION[@]}" 5
 
 # Cleanup
 rm -f /.firstboot
