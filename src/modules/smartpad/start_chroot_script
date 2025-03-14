@@ -175,7 +175,13 @@ if [[ -d "${YUMI_CONFIG_DIR}" ]]; then
     # Vérifie si un fichier ELF est fourni
     if [[ -f "${PRECOMPILED_ELF}" ]]; then
         echo "🔄 Utilisation du fichier .elf précompilé au lieu de recompiler..."
+
+        echo "Creation out"
         mkdir -p "${KLIPPER_DIR}/out"
+        echo "Permission"
+        sudo chown -R "${BASE_USER}:${BASE_USER}" "${KLIPPER_DIR}/out"
+        sudo chmod -R 775 "${KLIPPER_DIR}/out"
+        echo "Copie elf"
         cp -v "${PRECOMPILED_ELF}" "${KLIPPER_DIR}/out/klipper.elf"
     else
         echo "🔨 Compilation du firmware Klipper Linux MCU..."
