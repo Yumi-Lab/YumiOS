@@ -140,9 +140,9 @@ if [[ -d "/home/${BASE_USER}/yumi-config" ]]; then
     echo "Compile linux_mcu ..."
     #sudo -u "${BASE_USER}" make -j"$(nproc)"
     echo "Install linux_mcu ..."
-    sudo service klipper stop
+    #sudo service klipper stop
     make -u pi flash
-    sudo service klipper start
+    #sudo service klipper start
     sudo usermod -a -G tty pi
     echo "Cleanup ..."
     sudo -u "${BASE_USER}" make clean
