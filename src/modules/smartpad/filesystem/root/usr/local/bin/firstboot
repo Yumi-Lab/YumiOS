@@ -74,6 +74,34 @@ disable_firstboot() {
     rm -f /etc/systemd/system/firstboot.service &>/dev/null
 
 }
+
+make_mcu_linux() {
+
+    #echo_green "Install klipper's linux_host_mcu ..."
+    if [[ -d "/home/pi/yumi-config" ]]; then
+    #echo "Copying config ..."
+    cp -v "/home/pi/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" \
+        "/home/pi/klipper/.config"
+    pushd "/home/pi/klipper" &>/dev/null
+    #echo "Compile linux_mcu ..."
+    #sudo -u "${BASE_USER}" make -j"$(nproc)"
+    #echo "Install linux_mcu ..."
+    #sudo service klipper stop
+    make flash
+    #sudo service klipper start
+    sudo usermod -a -G tty pi
+    #echo "Cleanup ..."
+    make clean
+    make distclean
+    #echo "Copy service file ..."
+    cp -v "/home/${BASE_USER}/klipper/scripts/klipper-mcu.service" "/etc/systemd/system"
+    #echo "Enable klipper-mcu.service ..."
+    systemctl_if_exists enable klipper-mcu.service
+    #echo_green "Install klipper's linux_host_mcu ... [DONE]"
+else
+    #echo_red "WARNING! yumi-config repository not found! Abort install..."
+fi
+}
 #police plus grande avec des caractères deux fois plus hauts que la police standard
 setfont /usr/share/consolefonts/Lat15-TerminusBold20x10.psf.gz
 
@@ -94,6 +122,9 @@ gen_initramfs | "${DIALOG[@]}" --clear --gauge "Generate Initial RAM filesystem 
 
 # enable KlipperScreen
 enable_ks | "${DIALOG[@]}" --clear --gauge "Enable KLipperScreen ..." "${RESOLUTION[@]}" 80
+
+#make mcu linux
+make_mcu_linux | "${DIALOG[@]}" --clear --gauge "Make MCU Linux ..." "${RESOLUTION[@]}" 80
 
 # disable firstboot service
 disable_firstboot | "${DIALOG[@]}" --clear --gauge "Disable firstboot service ..." "${RESOLUTION[@]}" 90
