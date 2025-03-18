@@ -78,29 +78,24 @@ disable_firstboot() {
 make_mcu_linux() {
 
     #echo_green "Install klipper's linux_host_mcu ..."
-    if [[ -d "/home/pi/yumi-config" ]]; then
     #echo "Copying config ..."
-    cp -v "/home/pi/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" \
-        "/home/pi/klipper/.config"
-    pushd "/home/pi/klipper" &>/dev/null
+    cp -v "/home/pi/yumi-config/mcu_linux/smart-pi-one/linux_mcu.kconfig" "/home/pi/klipper/.config"
+    cd "/home/pi/klipper"
     #echo "Compile linux_mcu ..."
     #sudo -u "${BASE_USER}" make -j"$(nproc)"
     #echo "Install linux_mcu ..."
-    #sudo service klipper stop
+    sudo service klipper stop
     make flash
-    #sudo service klipper start
+    sudo service klipper start
     sudo usermod -a -G tty pi
     #echo "Cleanup ..."
     make clean
     make distclean
     #echo "Copy service file ..."
-    cp -v "/home/${BASE_USER}/klipper/scripts/klipper-mcu.service" "/etc/systemd/system"
+    cp -v "/home/pi/klipper/scripts/klipper-mcu.service" "/etc/systemd/system"
     #echo "Enable klipper-mcu.service ..."
     systemctl_if_exists enable klipper-mcu.service
     #echo_green "Install klipper's linux_host_mcu ... [DONE]"
-else
-    #echo_red "WARNING! yumi-config repository not found! Abort install..."
-fi
 }
 #police plus grande avec des caractères deux fois plus hauts que la police standard
 setfont /usr/share/consolefonts/Lat15-TerminusBold20x10.psf.gz
@@ -108,7 +103,7 @@ setfont /usr/share/consolefonts/Lat15-TerminusBold20x10.psf.gz
 
 # Welcome msg
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
-    --no-cancel --no-ok --pause "$(echo -e "welcome_msg")" "${RESOLUTION[@]}" 15
+    --no-cancel --no-ok --pause "$(welcome_msg)" "${RESOLUTION[@]}" 15
 
 # Init gauge
 sleep 1 | "${DIALOG[@]}" --clear --gauge "Firstboot preperation ..." "${RESOLUTION[@]}" 0
@@ -134,7 +129,7 @@ sleep 2 | "${DIALOG[@]}" --clear --gauge "Finalize Firstboot ..." "${RESOLUTION[
 
 # Show reboot screen
 "${DIALOG[@]}" --clear --title "Firstboot preperation" \
-    --no-cancel --no-ok --pause "$(echo -e "reboot_msg")" "${RESOLUTION[@]}" 5
+    --no-cancel --no-ok --pause "$(reboot_msg)" "${RESOLUTION[@]}" 5
 
 # Cleanup
 rm -f /.firstboot
