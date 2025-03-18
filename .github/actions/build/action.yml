@@ -30,7 +30,7 @@ runs:
 
     - name: Hold kernel and headers before any package installation (Save wifi)
       shell: bash
-      run: sudo apt-mark hold linux-image-current-sunxi linux-headers-current-sunxi
+      run: sudo apt-mark hold linux-image-current-sunxi linux-headers-current-sunxi || echo "Kernel headers not found, skipping hold step."
 
     - name: Checkout CustomPiOS
       uses: actions/checkout@v4
