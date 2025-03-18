@@ -27,13 +27,21 @@ runs:
     - name: Install Dependencies
       shell: bash
       run: sudo apt update; sudo apt install --yes aria2 coreutils jq p7zip-full qemu-user-static zip
-      
-    - name: Checkout CustomPiOS
+
+    #- name: Checkout CustomPiOS
+    #  uses: actions/checkout@v4
+    #  with:
+    #    repository: ${{ inputs.custompios-repository }}
+    #    ref: ${{ inputs.custompios-ref }}
+    #    path: CustomPiOS
+    
+    - name: Checkout CustomPiOS (Forked version)
       uses: actions/checkout@v4
       with:
-        repository: ${{ inputs.custompios-repository }}
-        ref: ${{ inputs.custompios-ref }}
+        repository: "maxme3d77/CustomPiOS-Yumi"
+        ref: "custom-branch"
         path: CustomPiOS
+
         
     - name: Create Image Directory
       shell: bash
