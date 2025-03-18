@@ -25,7 +25,7 @@ runs:
   using: "composite"
   steps:
 
-    - name: Hold kernel and headers before any package installation
+    - name: Hold kernel and headers before any package installation (Save wifi)
       shell: bash
       run: sudo apt-mark hold linux-image-current-sunxi linux-headers-current-sunxi
 
