@@ -8,7 +8,7 @@ inputs:
   custompios-repository:
     description: "Repository for CustomPiOS"
     required: false
-    default: "guysoft/CustomPiOS"
+    default: "Maxime3d77/CustomPiOS-Yumi" #"guysoft/CustomPiOS"
   custompios-ref:
     description: "Branch / Tag / SHA to checkout CustomPiOS"
     required: false
