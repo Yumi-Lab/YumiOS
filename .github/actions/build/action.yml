@@ -34,13 +34,13 @@ runs:
     #    repository: ${{ inputs.custompios-repository }}
     #    ref: ${{ inputs.custompios-ref }}
     #    path: CustomPiOS
-    
+
     
     - name: Checkout CustomPiOS (Forked version)
       uses: actions/checkout@v4
       with:
-        repository: "maxme3d77/CustomPiOS-Yumi"
-        ref: "custom-branch"
+        repository: "Maxime3d77/CustomPiOS-Yumi"
+        ref: ${{ inputs.custompios-ref }}
         path: CustomPiOS
 
         
