@@ -32,7 +32,7 @@ unpack /filesystem/home/pi/klipper/out /home/pi/klipper/out pi
 # Install new micro-controller code
 echo "Installing micro-controller code to /usr/local/bin/"
 rm -f /usr/local/bin/klipper_mcu
-cp home/pi/klipper/out/klipper.elf /usr/local/bin/klipper_mcu
+cp /home/pi/klipper/out/klipper.elf /usr/local/bin/klipper_mcu
 
 # Restart (if system install script present)
 if [ -f /etc/init.d/klipper_pru ]; then
