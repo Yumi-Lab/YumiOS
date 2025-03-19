@@ -27,7 +27,7 @@ sudo systemctl enable klipper-mcu.service
 
 #unpack file mcu
 unpack /filesystem/usr/local/bin /usr/local/bin root
-unpack /filesystem/home/pi/klipper/out home/pi/klipper/out pi
+unpack /filesystem/home/pi/klipper/out /home/pi/klipper/out pi
 
 # Install new micro-controller code
 echo "Installing micro-controller code to /usr/local/bin/"
