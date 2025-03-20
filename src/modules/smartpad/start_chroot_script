@@ -131,7 +131,6 @@ cd ..
 popd &>/dev/null
 echo_green "Install yumi-config smartpad_generic ... [DONE]"
 
-
 echo_green "Install YUMI_PLR ..."
 pushd "/home/${BASE_USER}" &>/dev/null
 sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/YUMI_PLR.git
