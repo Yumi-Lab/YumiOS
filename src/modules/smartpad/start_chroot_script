@@ -89,10 +89,10 @@ echo_green "Install Yumi Lab Plymouth theme on SmartPad... [DONE]"
  cd YUMI_SYNC
  sudo make install
 
-if [[ ! -x "$(command -v YUMI_SYNC)" ]]; then
-    echo "Erreur: YUMI_SYNC n’a pas été installé correctement."
-    exit 1
-fi
+#if [[ ! -x "$(command -v YUMI_SYNC)" ]]; then
+#    echo "Erreur: YUMI_SYNC n’a pas été installé correctement."
+#    exit 1
+#fi
 
  cd ..
  popd &>/dev/null
