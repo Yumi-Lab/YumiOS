@@ -157,7 +157,7 @@ SCRIPT_PATH="/usr/local/bin/fix-webcam.sh"
 SERVICE_PATH="/etc/systemd/system/fix-webcam.service"
 
 # 1. Créer le script fix-webcam.sh
-cat << 'EOF' | sudo tee $SCRIPT_PATH > /dev/null
+cat << 'EOF' | sudo tee ${SCRIPT_PATH} > /dev/null
 #!/bin/bash
 
 # Attendre que le système ait fini de détecter les périphériques
@@ -180,17 +180,17 @@ exit 1
 EOF
 
 # Rendre exécutable
-sudo chmod +x $SCRIPT_PATH
+sudo chmod +x ${SCRIPT_PATH}
 
 # 2. Créer le service systemd
-cat << EOF | sudo tee $SERVICE_PATH > /dev/null
+cat << EOF | sudo tee ${SERVICE_PATH} > /dev/null
 [Unit]
 Description=Fix Webcam Symlink
 After=multi-user.target
 
 [Service]
 Type=oneshot
-ExecStart=$SCRIPT_PATH
+ExecStart=${SCRIPT_PATH}
 RemainAfterExit=true
 
 [Install]
