@@ -149,3 +149,60 @@ echo_green "Install YUMI_PLR ... [DONE]"
 echo_green "ACL printer_data ..."
 sudo chmod 777 -R /home/pi/printer_data/
 echo_green "ACL printer_data ... [DONE]"
+
+echo_green "Cam FIX ..."
+# Ce script détecte dynamiquement la première webcam connectée et crée un lien symbolique /dev/webcam
+
+SCRIPT_PATH="/usr/local/bin/fix-webcam.sh"
+SERVICE_PATH="/etc/systemd/system/fix-webcam.service"
+
+# 1. Créer le script fix-webcam.sh
+cat << 'EOF' | sudo tee $SCRIPT_PATH > /dev/null
+#!/bin/bash
+
+# Attendre que le système ait fini de détecter les périphériques
+sleep 3
+
+# Supprimer l'ancien lien symbolique s'il existe
+[ -L /dev/webcam ] && rm -f /dev/webcam
+
+# Trouver le premier device video disponible
+for dev in /dev/video*; do
+    if v4l2-ctl --device="$dev" --all &>/dev/null; then
+        ln -s "$dev" /dev/webcam
+        echo "✅ Webcam trouvée: $dev => /dev/webcam"
+        exit 0
+    fi
+done
+
+echo "❌ Aucune webcam valide trouvée."
+exit 1
+EOF
+
+# Rendre exécutable
+sudo chmod +x $SCRIPT_PATH
+
+# 2. Créer le service systemd
+cat << EOF | sudo tee $SERVICE_PATH > /dev/null
+[Unit]
+Description=Fix Webcam Symlink
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=$SCRIPT_PATH
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 3. Activer le service
+sudo systemctl daemon-reload
+sudo systemctl enable fix-webcam.service
+
+# 4. Message final
+echo "✅ Service fix-webcam installé et activé avec succès."
+echo "Il créera automatiquement /dev/webcam au prochain démarrage."
+echo "Pointe-le dans Crowsnest: device: /dev/webcam"
+echo_green "Cam FIX ... [DONE]"
