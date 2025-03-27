@@ -96,6 +96,9 @@ fi
 
  cd ..
  popd &>/dev/null
+sudo chown -R pi:pi /home/pi/YUMI_SYNC
+sudo chmod -R u+rw /home/pi/YUMI_SYNC
+
  echo_green "Install YUMI_SYNC ... [DONE]"
 
 echo_green "Install moonraker-yumi-lab ..."
