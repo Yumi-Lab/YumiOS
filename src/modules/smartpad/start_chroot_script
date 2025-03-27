@@ -216,7 +216,7 @@ FILE="/home/pi/printer_data/moonraker.asvc"
 SERVICES=("KlipperScreen" "YUMI_SYNC" "crowsnest" "sonar")
 
 for SERVICE in "${SERVICES[@]}"; do
-    grep -qxF "$SERVICE" "$FILE" || echo "$SERVICE" >> "$FILE"
+     grep -qxF "${SERVICE}" "${FILE}" || echo "${SERVICE}" >> "${FILE}"
 done
 cat /home/pi/printer_data/moonraker.asvc
 
