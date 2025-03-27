@@ -209,3 +209,15 @@ echo "✅ Service fix-webcam installé et activé avec succès."
 echo "Il créera automatiquement /dev/webcam au prochain démarrage."
 echo "Pointe-le dans Crowsnest: device: /dev/webcam"
 echo_green "Cam FIX ... [DONE]"
+
+echo_green "Moonraker services managed ..."
+
+FILE="/home/pi/printer_data/moonraker.asvc"
+SERVICES=("KlipperScreen" "YUMI_SYNC" "crowsnest" "sonar")
+
+for SERVICE in "${SERVICES[@]}"; do
+    grep -qxF "$SERVICE" "$FILE" || echo "$SERVICE" >> "$FILE"
+done
+cat /home/pi/printer_data/moonraker.asvc
+
+echo_green "Moonraker services managed ... [DONE]"
