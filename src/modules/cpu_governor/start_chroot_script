@@ -17,36 +17,33 @@
 source /common.sh
 install_cleanup_trap
 
+echo_green "Fixing CPU governor to userspace and setting frequency to 912 MHz..."
 
-# Set CPU governor to powersave
-echo_green "Set CPU governor powersave..."
-# Script to set up CPU governor to powersave on first boot with a delay
-
-# Create the script that will be executed on first boot
-cat << 'EOF' > /usr/local/bin/set_cpu_governor.sh
+# Script to set up CPU governor to userspace and fix CPU freq at 912MHz
+cat << 'EOF' > /usr/local/bin/set_cpu_freq.sh
 #!/bin/bash
-# Set CPU governor to powersave
-for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
-    echo powersave | sudo tee $CPU;
+# Set CPU governor to userspace and frequency to 912MHz
+for CPU in /sys/devices/system/cpu/cpu*/cpufreq; do
+    echo userspace > \$CPU/scaling_governor
+    echo 912000 > \$CPU/scaling_setspeed
 done
 
 # Disable the service after first run
-systemctl disable set-cpu-governor.service
+systemctl disable set-cpu-freq.service
 EOF
 
-# Make the script executable
-chmod +x /usr/local/bin/set_cpu_governor.sh
+chmod +x /usr/local/bin/set_cpu_freq.sh
 
 # Create a systemd service to run the script at startup
-cat << 'EOF' > /etc/systemd/system/set-cpu-governor.service
+cat << 'EOF' > /etc/systemd/system/set-cpu-freq.service
 [Unit]
-Description=Set CPU governor to powersave on first boot
+Description=Fix CPU frequency at 912MHz using userspace governor
 After=multi-user.target
 
 [Service]
 Type=oneshot
 ExecStartPre=/bin/sleep 120
-ExecStart=/usr/local/bin/set_cpu_governor.sh
+ExecStart=/usr/local/bin/set_cpu_freq.sh
 RemainAfterExit=true
 
 [Install]
@@ -54,23 +51,45 @@ WantedBy=multi-user.target
 EOF
 
 # Reload systemd to recognize the new service
+systemctl daemon-reexec
 systemctl daemon-reload
 
 # Enable the service to run at startup
-systemctl enable set-cpu-governor.service
+systemctl enable set-cpu-freq.service
 
 # Start the service immediately for testing
-systemctl start set-cpu-governor.service
+systemctl start set-cpu-freq.service
 
 # Check the status of the service
-systemctl status set-cpu-governor.service
+systemctl status set-cpu-freq.service
 
-# Create a cron job to ensure CPU governor remains on powersave
-cat << 'EOF' > /etc/cron.d/cpu_governor
-*/5 * * * * root for CPU in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do echo powersave | sudo tee $CPU; done
+# Create a cron job to ensure frequency remains fixed
+cat << 'EOF' > /etc/cron.d/cpu_freq_fix
+*/5 * * * * root for CPU in /sys/devices/system/cpu/cpu*/cpufreq; do echo userspace > \$CPU/scaling_governor; echo 912000 > \$CPU/scaling_setspeed; done
 EOF
 
-echo "Setup complete. The CPU governor will be set to powersave on the next boot and maintained via cron."
+echo "Setup complete. CPU frequency fixed to 912 MHz and maintained via cron."
+
+echo_green "Set CPU frequency fixed to 912 MHz...(DONE)"
 
 
-echo_green "Set CPU governor powersave...(DONE)"
+echo_green "Applying USB stability tweaks..."
+
+# Désactiver l'autosuspend USB pour éviter les coupures
+cat << 'EOF' > /etc/udev/rules.d/99-usb-autosuspend.rules
+ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
+EOF
+
+udevadm control --reload-rules
+
+# Ajouter usb_persist=1 dans le bootloader si non présent (Armbian)
+if ! grep -q "usb_persist=1" /boot/armbianEnv.txt; then
+    echo "usb_persist=1" >> /boot/armbianEnv.txt
+fi
+
+# Appliquer immédiatement usb_persist à tous les périphériques actifs
+for dev in /sys/bus/usb/devices/*/power/control; do
+    echo on > "$dev"
+done
+
+echo_green "USB tweaks applied: autosuspend disabled, usb_persist enabled."
