@@ -20,7 +20,7 @@ install_cleanup_trap
 echo_green "Fixing CPU governor to userspace and setting frequency to 912 MHz..."
 
 # Script to set up CPU governor to userspace and fix CPU freq at 912MHz
-cat << 'EOF' > /usr/local/bin/set_cpu_freq.sh
+cat << EOF > /usr/local/bin/set_cpu_freq.sh
 #!/bin/bash
 # Set CPU governor to userspace and frequency to 912MHz
 for CPU in /sys/devices/system/cpu/cpu*/cpufreq; do
@@ -35,7 +35,7 @@ EOF
 chmod +x /usr/local/bin/set_cpu_freq.sh
 
 # Create a systemd service to run the script at startup
-cat << 'EOF' > /etc/systemd/system/set-cpu-freq.service
+cat << EOF > /etc/systemd/system/set-cpu-freq.service
 [Unit]
 Description=Fix CPU frequency at 912MHz using userspace governor
 After=multi-user.target
@@ -64,7 +64,7 @@ systemctl start set-cpu-freq.service
 systemctl status set-cpu-freq.service
 
 # Create a cron job to ensure frequency remains fixed
-cat << 'EOF' > /etc/cron.d/cpu_freq_fix
+cat << EOF > /etc/cron.d/cpu_freq_fix
 */5 * * * * root for CPU in /sys/devices/system/cpu/cpu*/cpufreq; do echo userspace > \$CPU/scaling_governor; echo 912000 > \$CPU/scaling_setspeed; done
 EOF
 
@@ -89,7 +89,7 @@ fi
 
 # Appliquer immédiatement usb_persist à tous les périphériques actifs
 for dev in /sys/bus/usb/devices/*/power/control; do
-    echo on > "$dev"
+     echo on > "${dev}"
 done
 
 echo_green "USB tweaks applied: autosuspend disabled, usb_persist enabled."
