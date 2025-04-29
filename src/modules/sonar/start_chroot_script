@@ -25,16 +25,16 @@ SR_BUILD_PACKAGE_FILE="/tmp/sr_packages.lst"
 echo_green "Installing sonar ..."
 
 ## Force apt update
-TMPDIR=/var/tmp sudo apt-get update
+#apt-get update
 ## Make sure 'git' is installed!
-check_install_pkgs git
+#check_install_pkgs git
 
 ## Step 1: Move to Home Dir as WorkingDirectoy
-pushd "/home/pi" &> /dev/null || exit 1
+#pushd "/home/pi" &> /dev/null || exit 1
 
 ## Step 2: clone sonar repo
 echo_green "Clone sonar repository ..."
-gitclone SONAR_REPO sonar
+git clone https://github.com/mainsail-crew/sonar.git
 
 ## Step 3: grep PKGLIST from install.sh for dependencies
 echo_green "Generating packages file ..."
