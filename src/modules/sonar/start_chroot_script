@@ -57,14 +57,15 @@ echo_green "Install sonar dependencies ..."
 #check_install_pkgs ${SONAR_DEPS}
 
 ## Step 7: Move to sonar as working directory
-pushd "/home/pi/sonar" &> /dev/null || exit 1
-
+#pushd "/home/pi/sonar" &> /dev/null || exit 1
+ls /home/pi
+cd /home/pi/sonar
 ## Step 8: Run sonar install routine
 echo_green "Launch sonar install routine ..."
 make install
 
 ## Step 9: Leave sonar
-popd &> /dev/null || exit 1
+#popd &> /dev/null || exit 1
 
 ## Step 10: clean packages.lst file
 #rm -f "${SR_BUILD_PACKAGE_FILE}"
