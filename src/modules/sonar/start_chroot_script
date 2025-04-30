@@ -34,6 +34,7 @@ echo_green "Installing sonar ..."
 
 ## Step 2: clone sonar repo
 echo_green "Clone sonar repository ..."
+cd /home/pi
 git clone https://github.com/mainsail-crew/sonar.git
 
 ## Step 3: grep PKGLIST from install.sh for dependencies
