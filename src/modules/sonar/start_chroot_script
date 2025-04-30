@@ -35,7 +35,7 @@ echo_green "Installing sonar ..."
 ## Step 2: clone sonar repo
 echo_green "Clone sonar repository ..."
 cd /home/pi
-git clone https://github.com/mainsail-crew/sonar.git
+#git clone https://github.com/mainsail-crew/sonar.git
 
 ## Step 3: grep PKGLIST from install.sh for dependencies
 echo_green "Generating packages file ..."
@@ -59,11 +59,27 @@ echo_green "Install sonar dependencies ..."
 
 ## Step 7: Move to sonar as working directory
 #pushd "/home/pi/sonar" &> /dev/null || exit 1
-ls /home/pi
-cd /home/pi/sonar
+#ls /home/pi
+#cd /home/pi/sonar
 ## Step 8: Run sonar install routine
 echo_green "Launch sonar install routine ..."
-make install
+#make install
+
+# Cloner le dépôt
+git clone https://github.com/mainsail-crew/sonar.git
+cd ~/sonar
+
+# Définir les variables attendues
+export BASE_USER=$(whoami)
+export SONAR_UNATTENDED=1
+export SONAR_DEFAULT_CONF="resources/sonar.conf"
+export SONAR_CONFIG_PATH="/home/${BASE_USER}/printer_data/config"
+export SONAR_LOG_PATH="/home/${BASE_USER}/printer_data/logs"
+export SONAR_ADD_SONAR_MOONRAKER="1"
+export SONAR_MOONRAKER_CONF_PATH="${SONAR_CONFIG_PATH}/moonraker.conf"
+
+# Lancer l'installation de manière silencieuse
+sudo -E make install
 
 ## Step 9: Leave sonar
 #popd &> /dev/null || exit 1
