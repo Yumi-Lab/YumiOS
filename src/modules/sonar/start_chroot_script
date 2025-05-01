@@ -34,7 +34,7 @@ echo_green "Installing sonar ..."
 
 ## Step 2: clone sonar repo
 echo_green "Clone sonar repository ..."
-cd /home/pi
+#cd /home/pi
 #git clone https://github.com/mainsail-crew/sonar.git
 
 ## Step 3: grep PKGLIST from install.sh for dependencies
@@ -66,8 +66,10 @@ echo_green "Launch sonar install routine ..."
 #make install
 
 # Cloner le dépôt
+cd /home/pi
 git clone https://github.com/mainsail-crew/sonar.git
-cd ~/sonar
+cd /home/pi/sonar
+
 
 # Définir les variables attendues
 export BASE_USER=$(whoami)
