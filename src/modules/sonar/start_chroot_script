@@ -80,7 +80,8 @@ export SONAR_CONFIG_PATH="/home/pi/printer_data/config"
 export SONAR_LOG_PATH="/home/pi/printer_data/logs"
 export SONAR_ADD_SONAR_MOONRAKER="1"
 export SONAR_MOONRAKER_CONF_PATH="${SONAR_CONFIG_PATH}/moonraker.conf"
-export SONAR_ENV_PATH=/home/pi/sonar  # ou un chemin approprié
+export SONAR_ENV_PATH="/home/pi/sonar"
+
 
 # Lancer l'installation de manière silencieuse
 sudo -E make install
