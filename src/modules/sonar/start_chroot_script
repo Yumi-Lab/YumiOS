@@ -69,16 +69,18 @@ echo_green "Launch sonar install routine ..."
 cd /home/pi
 git clone https://github.com/mainsail-crew/sonar.git
 cd /home/pi/sonar
-
+mkdir -p /chemin/vers/chroot/tmp
+chmod 1777 /chemin/vers/chroot/tmp
 
 # Définir les variables attendues
 export BASE_USER=$(whoami)
 export SONAR_UNATTENDED=1
 export SONAR_DEFAULT_CONF="resources/sonar.conf"
-export SONAR_CONFIG_PATH="/home/${BASE_USER}/printer_data/config"
-export SONAR_LOG_PATH="/home/${BASE_USER}/printer_data/logs"
+export SONAR_CONFIG_PATH="/home/pi/printer_data/config"
+export SONAR_LOG_PATH="/home/pi/printer_data/logs"
 export SONAR_ADD_SONAR_MOONRAKER="1"
 export SONAR_MOONRAKER_CONF_PATH="${SONAR_CONFIG_PATH}/moonraker.conf"
+export SONAR_ENV_PATH=/home/pi/sonar  # ou un chemin approprié
 
 # Lancer l'installation de manière silencieuse
 sudo -E make install
