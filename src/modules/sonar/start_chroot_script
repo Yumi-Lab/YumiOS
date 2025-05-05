@@ -17,7 +17,7 @@ mkdir -p /tmp
 chmod 1777 /tmp
 
 # Module only Variables
-SR_BUILD_INSTALL_SH="/home/${BASE_USER}/sonar/tools/install.sh"
+SR_BUILD_INSTALL_SH="/home/pi/sonar/tools/install.sh"
 SR_BUILD_PACKAGE_FILE="/tmp/sr_packages.lst"
 
 echo_green "Installing sonar ..."
@@ -48,13 +48,13 @@ pushd "/home/${BASE_USER}/sonar" &> /dev/null || exit 1
 
 ## Step 8: Run sonar install routine
 echo_green "Launch sonar install routine ..."
-ls -la /home/${BASE_USER}/sonar
-cat /home/${BASE_USER}/sonar/tools/install.sh || echo ">> install.sh introuvable"
+ls -la /home/"${BASE_USER}"/sonar
+cat /home/"${BASE_USER}"/sonar/tools/install.sh || echo ">> install.sh introuvable"
 make install || { echo_red "Sonar install failed"; exit 1; }
 
 ## >>> MODIFICATIONS : Script wifi_checker.py + service <<<
 echo_green "Copie du script wifi_checker.py ..."
-cp /home/${BASE_USER}/wifi_checker.py /usr/local/bin/
+cp /home/"${BASE_USER}"/wifi_checker.py /usr/local/bin/
 chmod +x /usr/local/bin/wifi_checker.py
 
 echo_green "Création du service wifi-checker ..."
