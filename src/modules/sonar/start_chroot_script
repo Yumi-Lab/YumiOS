@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-#### Sonar - A WiFi Keepalive daemon
-####
-#### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
-#### Copyright 2022
-#### https://github.com/mainsail-crew/sonar
-####
+#### Sonar
 #### This File is distributed under GPLv3
 ####
 
@@ -20,7 +15,6 @@ install_cleanup_trap
 
 mkdir -p /tmp
 chmod 1777 /tmp
-
 
 # Module only Variables
 SR_BUILD_INSTALL_SH="/home/${BASE_USER}/sonar/tools/install.sh"
@@ -44,11 +38,9 @@ gitclone SONAR_REPO sonar
 echo_green "Manually defining SONAR_DEPS ..."
 SONAR_DEPS="network-manager wireless-tools iw ethtool curl net-tools"
 
-
 ## Step 6: Install packages
 echo_green "Install sonar dependencies ..."
 # shellcheck disable=SC2086
-# disabled because we need 'wordsplitting'
 check_install_pkgs ${SONAR_DEPS}
 
 ## Step 7: Move to sonar as working directory
@@ -60,6 +52,31 @@ ls -la /home/${BASE_USER}/sonar
 cat /home/${BASE_USER}/sonar/tools/install.sh || echo ">> install.sh introuvable"
 make install || { echo_red "Sonar install failed"; exit 1; }
 
+## >>> MODIFICATIONS : Script wifi_checker.py + service <<<
+echo_green "Copie du script wifi_checker.py ..."
+cp /home/${BASE_USER}/wifi_checker.py /usr/local/bin/
+chmod +x /usr/local/bin/wifi_checker.py
+
+echo_green "Création du service wifi-checker ..."
+cat <<EOF > /etc/systemd/system/wifi-checker.service
+[Unit]
+Description=WiFi Checker Script
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/wifi_checker.py
+Restart=always
+User=${BASE_USER}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reexec
+systemctl daemon-reload
+systemctl enable wifi-checker.service
+systemctl start wifi-checker.service
+## <<< FIN DES MODIFICATIONS <<<
 
 ## Step 9: Leave sonar
 popd &> /dev/null || exit 1
