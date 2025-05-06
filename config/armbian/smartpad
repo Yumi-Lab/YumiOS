@@ -14,7 +14,7 @@ DOWNLOAD_URL_IMAGE="https://github.com/Yumi-Lab/SmartPi-armbian/releases/downloa
 
 
 BASE_IMAGE_ENLARGEROOT=6000
-MODULES="base(udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,sonar,smartpad,usb-automount,cpu_governor,mcu-rpi))"
+MODULES="base(udev_fix,armbian(armbian_net,yumios,klipper,is_req_preinstall,moonraker,mainsail,timelapse,klipperscreen,crowsnest,smartpad,usb-automount,cpu_governor,mcu-rpi))" #,sonar
 #pkgupgrade
 # export Variables
 export BASE_ARCH
