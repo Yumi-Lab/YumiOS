@@ -73,23 +73,3 @@ echo "Setup complete. CPU frequency fixed to 912 MHz and maintained via cron."
 echo_green "Set CPU frequency fixed to 912 MHz...(DONE)"
 
 
-echo_green "Applying USB stability tweaks..."
-
-# Désactiver l'autosuspend USB pour éviter les coupures
-cat << EOF > /etc/udev/rules.d/99-usb-autosuspend.rules
-ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
-EOF
-
-udevadm control --reload-rules
-
-# Ajouter usb_persist=1 dans le bootloader si non présent (Armbian)
-if ! grep -q "usb_persist=1" /boot/armbianEnv.txt; then
-    echo "usb_persist=1" >> /boot/armbianEnv.txt
-fi
-
-# Appliquer immédiatement usb_persist à tous les périphériques actifs
-for dev in /sys/bus/usb/devices/*/power/control; do
-     echo on > "${dev}"
-done
-
-echo_green "USB tweaks applied: autosuspend disabled, usb_persist enabled."
