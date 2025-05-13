@@ -17,11 +17,11 @@ mkdir -p /tmp
 chmod 1777 /tmp
 
 # Module only Variables
-SR_BUILD_INSTALL_SH="/home/pi/sonar/tools/install.sh"
+#SR_BUILD_INSTALL_SH="/home/pi/sonar/tools/install.sh"
 SR_BUILD_PACKAGE_FILE="/tmp/sr_packages.lst"
-SONAR_CONFIG_PATH=/etc/sonar
-SONAR_LOG_PATH=/var/log/sonar
-SONAR_SYSTEMD_PATH=/etc/systemd/system
+#SONAR_CONFIG_PATH=/etc/sonar
+#SONAR_LOG_PATH=/var/log/sonar
+#SONAR_SYSTEMD_PATH=/etc/systemd/system
 
 echo_green "Installing sonar ..."
 
