@@ -4,6 +4,7 @@
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
 #### Copyright 2024 - till today
 #### https://github.com/mainsail-crew/MainsailOS
+#### Custom Maxime3d77
 ####
 #### This File is distributed under GPLv3
 ####
@@ -39,7 +40,8 @@ check_install_pkgs ${KLIPPERSCREEN_DEPS}
 pushd "/home/${BASE_USER}" &> /dev/null || exit 1
 
 ## Step 2: clone KlipperScreen repo
-gitclone KLIPPERSCREEN_REPO KlipperScreen
+#gitclone KLIPPERSCREEN_REPO KlipperScreen
+gitclone https://github.com/Yumi-Lab/KlipperScreen.git
 
 ## Step 3: Move to KlipperScreen as working directory
 pushd "/home/${BASE_USER}/KlipperScreen" &> /dev/null || exit 1
