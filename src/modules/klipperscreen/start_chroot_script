@@ -4,6 +4,7 @@
 #### Written by Stephan Wendel aka KwadFan <me@stephanwe.de>
 #### Copyright 2024 - till today
 #### https://github.com/mainsail-crew/MainsailOS
+#### Custom Maxime3d77
 ####
 #### This File is distributed under GPLv3
 ####
@@ -20,6 +21,7 @@ install_cleanup_trap
 # pip install for KlipperScreen 
 sudo apt install -y python3-pip
 sudo apt install -y python3.11-venv
+
 
 # Module only Variables
 KS_BUILD_INSTALL_SH="/home/${BASE_USER}/KlipperScreen/scripts/KlipperScreen-install.sh"
@@ -39,6 +41,7 @@ pushd "/home/${BASE_USER}" &> /dev/null || exit 1
 
 ## Step 2: clone KlipperScreen repo
 gitclone KLIPPERSCREEN_REPO KlipperScreen
+
 
 ## Step 3: Move to KlipperScreen as working directory
 pushd "/home/${BASE_USER}/KlipperScreen" &> /dev/null || exit 1

@@ -67,17 +67,28 @@ jobs:
           custompios-ref: 1.5.0
 
       - name: Rename image file
-        id: move-image
-        if: always()
-        shell: bash
-        run: |
-          source repository/src/config
-          NOW="$(date +"%Y-%m-%d")"
-          IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
+          id: move-image
+          if: always()
+          shell: bash
+          run: |
+            set -euxo pipefail
 
-          mv repository/src/workspace/*.img $IMAGE.img
+            source repository/src/config
+            NOW="$(date +"%Y-%m-%d")"
+            IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
 
-          echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+            echo "🔍 Listing workspace contents before renaming:"
+            ls -l repository/src/workspace/
+
+            echo "🛠️ Fixing permissions (if root-owned files)..."
+            sudo chown $USER:$USER repository/src/workspace/*.img || true
+
+            echo "🚚 Renaming image to ${IMAGE}.img"
+            mv repository/src/workspace/*.img "$IMAGE.img"
+
+            echo "✅ Image renamed successfully"
+            echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+
 
       - name: Upload failed Logfile
         if: failure()
