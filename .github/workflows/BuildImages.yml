@@ -74,7 +74,8 @@ jobs:
           source repository/src/config
           NOW="$(date +"%Y-%m-%d")"
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
-
+          echo "🔍 Listing workspace before rename:"
+          ls -l repository/src/workspace || true
           mv repository/src/workspace/*.img $IMAGE.img
 
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
