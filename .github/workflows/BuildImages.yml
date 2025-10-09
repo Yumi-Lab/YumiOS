@@ -76,8 +76,11 @@ jobs:
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
           echo "🔍 Listing workspace before rename:"
           ls -l repository/src/workspace || true
+          echo "🛠️ Fixing ownership..."
+          sudo chown $USER:$USER repository/src/workspace/*.img || true
+          echo "🚚 Renaming image to ${IMAGE}.img"
           mv repository/src/workspace/*.img $IMAGE.img
-
+          echo "✅ Image renamed successfully"
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
 
       - name: Upload failed Logfile
