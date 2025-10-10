@@ -25,7 +25,8 @@ on:
 
 # Allow to stop obsolete workflows
 concurrency:
-  group: ci-buildtrain-${{ github.ref }}-1
+  #group: ci-buildtrain-${{ github.ref }}-1
+  group: ci-build-${{ github.ref }}-1
   cancel-in-progress: true
 
 jobs:
@@ -71,37 +72,11 @@ jobs:
         if: always()
         shell: bash
         run: |
-          set -euxo pipefail
-          if [ -f repository/src/config ]; then
-            source repository/src/config
-          else
-            echo "⚠️ Aucun fichier de configuration trouvé, utilisation des valeurs par défaut"
-            DIST_NAME="YumiOS"
-            DIST_VERSION="unknown"
-          fi
-          DIST_PATH="${DIST_PATH:-repository/src/workspace}"
-          # Vérifier que le dossier existe
-          if [ ! -d "$DIST_PATH" ]; then
-            echo "❌ Dossier $DIST_PATH introuvable"
-            exit 1
-          fi
+          source repository/src/config
           NOW="$(date +"%Y-%m-%d")"
           IMAGE="${NOW}-${DIST_NAME}-${DIST_VERSION}-${{ steps.build.outputs.type }}-${{ steps.build.outputs.sbc }}"
 
-          echo "🔍 Listing workspace before rename:"
-          ls -l "$DIST_PATH"
-
-          echo "🛠️ Fixing ownership (si root)..."
-          sudo chown -R $USER:$USER "$DIST_PATH" || true
-
-          echo "🚚 Renaming image to ${IMAGE}.img"
-          sudo mv "$DIST_PATH"/*.img "$IMAGE.img"
-
-          echo "🧹 Fixing ownership after rename"
-          sudo chown $USER:$USER "$IMAGE.img"
-
-          echo "✅ Image renamed successfully"
-          ls -l "$IMAGE.img"
+          mv repository/src/workspace/*.img $IMAGE.img
 
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
 

@@ -79,7 +79,7 @@ pushd "/home/${BASE_USER}/moonraker" &> /dev/null || exit 1
 echo_green "Run moonraker install routine ..."
 ## Step 8: Run moonraker install routine
 echo_green "Launch moonraker install routine ..."
-sudo -u "${BASE_USER}" ./scripts/install-moonraker.sh -z -x
+sudo -u "${BASE_USER}" ./scripts/install-moonraker.sh -s -z #-x
 
 
 echo_green "Install policykit rules ..."
