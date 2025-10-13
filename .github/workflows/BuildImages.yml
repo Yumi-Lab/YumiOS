@@ -25,12 +25,14 @@ on:
 
 # Allow to stop obsolete workflows
 concurrency:
-  group: ci-buildtrain-${{ github.ref }}-1
+  #group: ci-buildtrain-${{ github.ref }}-1
+  group: ci-build-${{ github.ref }}-1
   cancel-in-progress: true
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -47,7 +49,8 @@ jobs:
 
   build:
     needs: setup
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     strategy:
       fail-fast: false
       matrix:

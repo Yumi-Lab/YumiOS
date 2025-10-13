@@ -13,5 +13,6 @@
 ####
 #### Credits: Thanks to Arksine for this great API :)
 
-[ -n "$MOONRAKER_REPO_SHIP" ] || MOONRAKER_REPO_SHIP=https://github.com/Arksine/moonraker.git
+#[ -n "$MOONRAKER_REPO_SHIP" ] || MOONRAKER_REPO_SHIP=https://github.com/Arksine/moonraker.git
+[ -n "$MOONRAKER_REPO_SHIP" ] || MOONRAKER_REPO_SHIP=https://github.com/Yumi-Lab/moonraker.git
 [ -n "$MOONRAKER_REPO_BRANCH" ] || MOONRAKER_REPO_BRANCH=master
