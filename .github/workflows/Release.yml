@@ -11,7 +11,8 @@ on:
 jobs:
   push-version-number:
     name: Push version number
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     steps:
       - name: Clone develop repository
         uses: actions/checkout@v4
@@ -44,7 +45,8 @@ jobs:
   update-master-branch:
     name: Update master branch
     needs: push-version-number
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     steps:
       - uses: everlytic/branch-merge@1.1.5
         with:
@@ -56,7 +58,8 @@ jobs:
   release:
     name: Create Release
     needs: update-master-branch
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     outputs:
       id: ${{ steps.create-release.outputs.id }}
       date: ${{ steps.base-name.outputs.date }}
@@ -102,7 +105,8 @@ jobs:
   matrix:
     name: Create Matrix
     needs: release
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -121,7 +125,8 @@ jobs:
 
   build:
     needs: [release, matrix]
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     outputs:
       base_name: ${{ steps.move-image.outputs.base_name }}
     strategy:
@@ -225,7 +230,8 @@ jobs:
   finish:
     name: Finish Release
     needs: [release, build]
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     steps:
       - name: Publish Release
         uses: eregon/publish-release@v1
@@ -237,7 +243,8 @@ jobs:
   update-changelog:
     needs: finish
     name: Generate changelog
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-arm
     steps:
       - name: Checkout
         uses: actions/checkout@v3
