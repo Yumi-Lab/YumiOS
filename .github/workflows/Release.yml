@@ -266,7 +266,6 @@ jobs:
           fi
 
       - name: Generate a changelog
-        #uses: orhun/git-cliff-action@v2
         uses: tj-actions/git-cliff@v4
         id: git-cliff
         with:
@@ -274,6 +273,7 @@ jobs:
           args: ${{ steps.get_tags.outputs.START_TAG }}..${{ steps.get_tags.outputs.END_TAG }}
         env:
           OUTPUT: ${{ github.workspace }}/CHANGELOG.md
+
 
       - name: Show CHANGELOG
         run: |
