@@ -255,20 +255,20 @@ jobs:
           fetch-depth: 0
 
       - name: Get latest tag
-          id: get_tags
-          shell: bash
-          run: |
-            END_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-            echo "END_TAG=$END_TAG" >> $GITHUB_OUTPUT
+        id: get_tags
+        shell: bash
+        run: |
+          END_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "END_TAG=$END_TAG" >> $GITHUB_OUTPUT
 
       - name: Generate a changelog
-          uses: orhun/git-cliff-action@v4
-          id: git-cliff
-          with:
-            config: cliff.toml
-            # On ne met pas de "args" → il prendra tout le repo
-          env:
-            OUTPUT: ${{ github.workspace }}/CHANGELOG.md
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          config: cliff.toml
+          # On ne met pas de "args" → il prendra tout le repo
+        env:
+          OUTPUT: ${{ github.workspace }}/CHANGELOG.md
 
 
       - name: Show CHANGELOG
