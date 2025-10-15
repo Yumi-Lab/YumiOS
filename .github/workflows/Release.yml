@@ -258,20 +258,15 @@ jobs:
         id: get_tags
         shell: bash
         run: |
-          echo "END_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
-
-          if [[ "${{ github.repository_owner }}" == "Yumi-Lab" ]]; then
-            echo "START_TAG=0.0.0" >> $GITHUB_OUTPUT
-          else
-            echo "START_TAG=$(git for-each-ref --sort=creatordate --count=1 --format='%(refname:lstrip=2)')" >> $GITHUB_OUTPUT
-          fi
+          END_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "END_TAG=$END_TAG" >> $GITHUB_OUTPUT
 
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v4
         id: git-cliff
         with:
           config: cliff.toml
-          args: ${{ steps.get_tags.outputs.START_TAG }}..${{ steps.get_tags.outputs.END_TAG }}
+          # On ne met pas de "args" → il prendra tout le repo
         env:
           OUTPUT: ${{ github.workspace }}/CHANGELOG.md
 
