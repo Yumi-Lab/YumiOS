@@ -26,6 +26,7 @@ git clone https://github.com/Yumi-Lab/klipper_tmc_autotune.git
 cd klipper_tmc_autotune
 chmod +x install.sh
 ./install.sh
+git config --global --add safe.directory /home/pi/klipper_tmc_autotune
 echo_green "Install TMC Autotune launch script..."
 
 #sudo chmod +x install_tmc_autotune.sh
