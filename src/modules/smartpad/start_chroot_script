@@ -98,7 +98,9 @@ fi
  popd &>/dev/null
 sudo chown -R pi:pi /home/pi/YUMI_SYNC
 sudo chmod -R u+rw /home/pi/YUMI_SYNC
+cd YUMI_SYNC
 git reset --hard HEAD
+cd ..
  echo_green "Install YUMI_SYNC ... [DONE]"
 
 echo_green "Install moonraker-yumi-lab ..."
