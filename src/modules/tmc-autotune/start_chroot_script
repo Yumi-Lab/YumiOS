@@ -31,7 +31,7 @@ sudo chown -R pi:pi /home/pi/klipper_tmc_autotune
 chmod -R 755 /home/pi/klipper_tmc_autotune
 cd /home/pi/klipper_tmc_autotune
 git reset --hard HEAD
-rm -rf .git
+#rm -rf .git
 echo_green "Install TMC Autotune launch script..."
 
 #sudo chmod +x install_tmc_autotune.sh
