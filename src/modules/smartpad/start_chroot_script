@@ -92,7 +92,10 @@ if [[ ! -x "$(command -v YUMI_SYNC)" ]]; then
     echo "Erreur: YUMI_SYNC n’a pas été installé correctement."
 #    exit 1
 fi
-# Nettoyage Git (pendant qu’on est dans le dossier)
+# Autoriser Git à manipuler ce dossier
+git config --global --add safe.directory /home/pi/YUMI_SYNC
+
+# Nettoyage Git (doit être fait dans le dépôt)
 if [ -d ".git" ]; then
     git reset --hard HEAD
 else
