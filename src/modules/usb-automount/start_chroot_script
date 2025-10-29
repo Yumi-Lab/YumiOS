@@ -21,7 +21,7 @@ install_cleanup_trap
 #Install USB tool for GCODES
 echo_green "Install USB Mount Scripts..."
 pushd "/home/${BASE_USER}" &>/dev/null
-sudo -u "${BASE_USER}" git clone https://github.com/Yumi-Lab/automount-usb-klipper.git
+sudo -u "${BASE_USER}" git clone https://github.com/Maxime3d77/automount-usb-klipper
 cd automount-usb-klipper/
 sudo chmod +x CONFIGURE.sh
 sudo ./CONFIGURE.sh
